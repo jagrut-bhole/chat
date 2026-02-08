@@ -1,10 +1,10 @@
 import { NextAuthOptions } from "next-auth";
-import prisma from "./prisma";
+import prisma from "../prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { loginRateLimiter } from "./auth/rate-limiter";
-import { securityLogger } from "./auth/security-logger";
-import { AccountLockout } from "./auth/account-lockout";
+import { loginRateLimiter } from "./rate-limiter";
+import { securityLogger } from "./security-logger";
+import { AccountLockout } from "./account-lockout";
 
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error("NEXTAUTH_SECRET is not defined in environment variables");
@@ -94,7 +94,7 @@ export const authOptions: NextAuthOptions = {
           if (nowLocked) {
             securityLogger.logAccountLocked(credentials.username);
             throw new Error(
-              `Account locked due to multiple failed login attempts. Try again in 15 minutes.`
+              `Account locked due to multiple failed login attempts. Try again in 30 minutes.`
             );
           }
 

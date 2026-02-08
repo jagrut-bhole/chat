@@ -3,6 +3,7 @@
 ## **1. Technology Stack**
 
 ### Frontend
+
 - **Next.js 14+** (App Router)
 - **TypeScript**
 - **Tailwind CSS** (for styling)
@@ -10,20 +11,24 @@
 - **Socket.io-client** (WebSocket client)
 
 ### Backend
+
 - **Next.js API Routes** (REST APIs)
 - **Socket.io** (WebSocket server)
 - **Node.js** (separate WebSocket server or integrated)
 
 ### Database
+
 - **PostgreSQL** (main database)
 - **Prisma ORM** (database access)
 - **Redis** (optional but recommended - for session storage, matching queue, caching)
 
 ### Storage & Services
+
 - **AWS S3 / Cloudflare R2 / UploadThing** (file storage)
 - **NextAuth.js** or **Clerk** (authentication)
 
 ### DevOps
+
 - **Vercel** (Next.js hosting) or **Railway/Render**
 - **Separate server** for WebSocket (if needed)
 
@@ -44,7 +49,7 @@ model User {
   isOnline      Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  
+
   groupMemberships  GroupMember[]
   groupMessages     GroupMessage[]
   privateChatsAsUser1  PrivateChat[] @relation("User1Chats")
@@ -62,10 +67,10 @@ model Group {
   maxMembers  Int      @default(50)
   expiresAt   DateTime // Auto-delete time
   createdAt   DateTime @default(now())
-  
+
   members     GroupMember[]
   messages    GroupMessage[]
-  
+
   @@index([latitude, longitude])
   @@index([expiresAt])
 }
@@ -75,10 +80,10 @@ model GroupMember {
   userId    String
   groupId   String
   joinedAt  DateTime @default(now())
-  
+
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  
+
   @@unique([userId, groupId])
   @@index([groupId])
 }
@@ -91,10 +96,10 @@ model GroupMessage {
   mediaUrl    String?  // Image URL if photo uploaded
   mediaType   String?  // 'image', 'gif', etc.
   createdAt   DateTime @default(now())
-  
+
   group       Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([groupId, createdAt])
 }
 
@@ -106,11 +111,11 @@ model PrivateChat {
   status      String   @default("active") // active, ended
   createdAt   DateTime @default(now())
   endedAt     DateTime?
-  
+
   user1       User     @relation("User1Chats", fields: [user1Id], references: [id], onDelete: Cascade)
   user2       User     @relation("User2Chats", fields: [user2Id], references: [id], onDelete: Cascade)
   messages    PrivateMessage[]
-  
+
   @@index([user1Id, user2Id])
   @@index([status])
 }
@@ -123,10 +128,10 @@ model PrivateMessage {
   mediaUrl    String?
   mediaType   String?
   createdAt   DateTime @default(now())
-  
+
   chat        PrivateChat @relation(fields: [chatId], references: [id], onDelete: Cascade)
   sender      User        @relation(fields: [senderId], references: [id], onDelete: Cascade)
-  
+
   @@index([chatId, createdAt])
 }
 ```
@@ -213,6 +218,7 @@ model PrivateMessage {
 ## **4. API Endpoints Structure**
 
 ### Authentication
+
 ```
 POST   /api/auth/register
 POST   /api/auth/login
@@ -222,6 +228,7 @@ PATCH  /api/auth/location (update user location)
 ```
 
 ### Groups (Location-based)
+
 ```
 GET    /api/groups?lat={lat}&lng={lng}&radius={radius}
 POST   /api/groups (create new group)
@@ -234,6 +241,7 @@ DELETE /api/groups/:id (admin only)
 ```
 
 ### Random Chat (Omegle-style)
+
 ```
 POST   /api/random/start (join matching queue)
 POST   /api/random/skip (skip current partner)
@@ -244,6 +252,7 @@ POST   /api/random/messages/:chatId
 ```
 
 ### File Upload
+
 ```
 POST   /api/upload (upload image/media)
 ```
@@ -253,6 +262,7 @@ POST   /api/upload (upload image/media)
 ## **5. WebSocket Events**
 
 ### Client → Server
+
 ```javascript
 // Connection
 connect
@@ -274,6 +284,7 @@ typing_private { chatId, isTyping }
 ```
 
 ### Server → Client
+
 ```javascript
 // Connection
 authenticated
@@ -298,68 +309,72 @@ typing_indicator_private { chatId, isTyping }
 ## **6. Core Services/Modules**
 
 ### **LocationService**
+
 ```typescript
 class LocationService {
   // Calculate distance between two coordinates
-  calculateDistance(lat1, lng1, lat2, lng2): number
-  
+  calculateDistance(lat1, lng1, lat2, lng2): number;
+
   // Find groups within radius
-  findNearbyGroups(userLat, userLng, radius): Promise<Group[]>
-  
+  findNearbyGroups(userLat, userLng, radius): Promise<Group[]>;
+
   // Create location-based group
-  createLocationGroup(lat, lng, radius, expiresIn): Promise<Group>
+  createLocationGroup(lat, lng, radius, expiresIn): Promise<Group>;
 }
 ```
 
 ### **MatchingService**
+
 ```typescript
 class MatchingService {
   // Add user to matching queue
-  addToQueue(userId): void
-  
+  addToQueue(userId): void;
+
   // Find match for user
-  findMatch(userId): Promise<User | null>
-  
+  findMatch(userId): Promise<User | null>;
+
   // Remove user from queue
-  removeFromQueue(userId): void
-  
+  removeFromQueue(userId): void;
+
   // Create private chat between matched users
-  createPrivateChat(user1Id, user2Id): Promise<PrivateChat>
+  createPrivateChat(user1Id, user2Id): Promise<PrivateChat>;
 }
 ```
 
 ### **GroupService**
+
 ```typescript
 class GroupService {
   // CRUD operations
-  createGroup(data): Promise<Group>
-  getGroup(groupId): Promise<Group>
-  deleteGroup(groupId): Promise<void>
-  
+  createGroup(data): Promise<Group>;
+  getGroup(groupId): Promise<Group>;
+  deleteGroup(groupId): Promise<void>;
+
   // Membership
-  joinGroup(userId, groupId): Promise<void>
-  leaveGroup(userId, groupId): Promise<void>
-  
+  joinGroup(userId, groupId): Promise<void>;
+  leaveGroup(userId, groupId): Promise<void>;
+
   // Messages
-  sendMessage(groupId, userId, content, mediaUrl): Promise<Message>
-  getMessages(groupId, cursor, limit): Promise<Message[]>
-  
+  sendMessage(groupId, userId, content, mediaUrl): Promise<Message>;
+  getMessages(groupId, cursor, limit): Promise<Message[]>;
+
   // Auto-deletion
-  deleteExpiredGroups(): Promise<void>
+  deleteExpiredGroups(): Promise<void>;
 }
 ```
 
 ### **UploadService**
+
 ```typescript
 class UploadService {
   // Upload file to cloud storage
-  uploadFile(file, userId): Promise<string> // returns URL
-  
+  uploadFile(file, userId): Promise<string>; // returns URL
+
   // Validate file (size, type)
-  validateFile(file): boolean
-  
+  validateFile(file): boolean;
+
   // Delete file
-  deleteFile(url): Promise<void>
+  deleteFile(url): Promise<void>;
 }
 ```
 
@@ -434,6 +449,7 @@ store/
 ## **8. Key Algorithms**
 
 ### **Geospatial Distance Calculation**
+
 ```
 Haversine Formula:
 - Calculate distance between two lat/lng coordinates
@@ -442,6 +458,7 @@ Haversine Formula:
 ```
 
 ### **Random Matching Algorithm**
+
 ```
 1. User clicks "Search"
 2. Add user to Redis queue: LPUSH matching_queue userId
@@ -456,6 +473,7 @@ Haversine Formula:
 ```
 
 ### **Auto-Deletion System**
+
 ```
 Cron job runs every 5 minutes:
 1. Query groups where expiresAt < now()
@@ -470,6 +488,7 @@ Cron job runs every 5 minutes:
 ## **9. Data Flow Examples**
 
 ### **Scenario 1: User Joins Group**
+
 ```
 1. User opens /groups page
 2. Frontend calls GET /api/groups?lat=X&lng=Y&radius=5
@@ -485,6 +504,7 @@ Cron job runs every 5 minutes:
 ```
 
 ### **Scenario 2: Random Chat**
+
 ```
 1. User clicks "Find Random Chat"
 2. Frontend calls POST /api/random/start
@@ -501,6 +521,7 @@ Cron job runs every 5 minutes:
 ```
 
 ### **Scenario 3: Send Message with Image**
+
 ```
 1. User selects image file
 2. Frontend calls POST /api/upload with multipart form
@@ -519,6 +540,7 @@ Cron job runs every 5 minutes:
 ## **10. Deployment Architecture**
 
 ### **Option A: Monolith (Simpler)**
+
 ```
 Vercel (Next.js + API Routes + Socket.io)
     ↓
@@ -528,6 +550,7 @@ S3 (AWS/Cloudflare R2)
 ```
 
 ### **Option B: Separated (Scalable)**
+
 ```
 Vercel (Next.js Frontend + API Routes)
     ↓

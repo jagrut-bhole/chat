@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String @id @default(uuid())
+  username String @unique
+  password String
+
+  // Account security fields
+  failedLoginAttempts Int      @default(0)
+  lockedUntil         DateTime?
+  lastLoginAt         DateTime?
+
+  groups Group[] @relation("GroupMembers")
+
+  createdAt DateTime @default(now())
+}
+
+model Group {
+  id String @id @default(uuid())
+  name String
+  members User[] @relation("GroupMembers")
+  createdAt DateTime @default(now())
+}
