@@ -2,9 +2,11 @@ import "next-auth";
 
 declare module "next-auth" {
   interface Session {
-    id: string;
-    username: string;
-    createdAt: string;
+    user: {
+      id: string;
+      username: string;
+      createdAt: string;
+    } & DefaultSession["user"];
   }
 
   interface User {

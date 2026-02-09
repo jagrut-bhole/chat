@@ -13,18 +13,25 @@ model User {
   password String
 
   // Account security fields
-  failedLoginAttempts Int      @default(0)
+  failedLoginAttempts Int       @default(0)
   lockedUntil         DateTime?
   lastLoginAt         DateTime?
 
+  // user's groups
   groups Group[] @relation("GroupMembers")
+
+  //users location
+  latitude     Float?
+  longitude    Float?
+  lastLocation DateTime?
+  isOnline     Boolean   @default(false)
 
   createdAt DateTime @default(now())
 }
 
 model Group {
-  id String @id @default(uuid())
-  name String
-  members User[] @relation("GroupMembers")
+  id        String   @id @default(uuid())
+  name      String
+  members   User[]   @relation("GroupMembers")
   createdAt DateTime @default(now())
 }
