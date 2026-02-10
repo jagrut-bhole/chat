@@ -127,9 +127,9 @@ export const authOptions: NextAuthOptions = {
 
     session: async ({ session, token }) => {
       if (token) {
-        session.id = token.id;
-        session.username = token.username;
-        session.createdAt = token.createdAt;
+        session.user.id = token.id;
+        session.user.username = token.username;
+        session.user.createdAt = token.createdAt;
       }
 
       return session;

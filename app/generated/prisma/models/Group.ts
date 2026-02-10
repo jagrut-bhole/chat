@@ -20,45 +20,107 @@ export type GroupModel = runtime.Types.Result.DefaultSelection<Prisma.$GroupPayl
 
 export type AggregateGroup = {
   _count: GroupCountAggregateOutputType | null
+  _avg: GroupAvgAggregateOutputType | null
+  _sum: GroupSumAggregateOutputType | null
   _min: GroupMinAggregateOutputType | null
   _max: GroupMaxAggregateOutputType | null
+}
+
+export type GroupAvgAggregateOutputType = {
+  maxMembers: number | null
+  latitude: number | null
+  longitude: number | null
+}
+
+export type GroupSumAggregateOutputType = {
+  maxMembers: number | null
+  latitude: number | null
+  longitude: number | null
 }
 
 export type GroupMinAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
+  maxMembers: number | null
+  expiryDate: Date | null
+  latitude: number | null
+  longitude: number | null
+  lastLocation: Date | null
   createdAt: Date | null
 }
 
 export type GroupMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
+  maxMembers: number | null
+  expiryDate: Date | null
+  latitude: number | null
+  longitude: number | null
+  lastLocation: Date | null
   createdAt: Date | null
 }
 
 export type GroupCountAggregateOutputType = {
   id: number
   name: number
+  description: number
+  maxMembers: number
+  expiryDate: number
+  latitude: number
+  longitude: number
+  lastLocation: number
   createdAt: number
   _all: number
 }
 
 
+export type GroupAvgAggregateInputType = {
+  maxMembers?: true
+  latitude?: true
+  longitude?: true
+}
+
+export type GroupSumAggregateInputType = {
+  maxMembers?: true
+  latitude?: true
+  longitude?: true
+}
+
 export type GroupMinAggregateInputType = {
   id?: true
   name?: true
+  description?: true
+  maxMembers?: true
+  expiryDate?: true
+  latitude?: true
+  longitude?: true
+  lastLocation?: true
   createdAt?: true
 }
 
 export type GroupMaxAggregateInputType = {
   id?: true
   name?: true
+  description?: true
+  maxMembers?: true
+  expiryDate?: true
+  latitude?: true
+  longitude?: true
+  lastLocation?: true
   createdAt?: true
 }
 
 export type GroupCountAggregateInputType = {
   id?: true
   name?: true
+  description?: true
+  maxMembers?: true
+  expiryDate?: true
+  latitude?: true
+  longitude?: true
+  lastLocation?: true
   createdAt?: true
   _all?: true
 }
@@ -101,6 +163,18 @@ export type GroupAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: GroupAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: GroupSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: GroupMinAggregateInputType
@@ -131,6 +205,8 @@ export type GroupGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: GroupCountAggregateInputType | true
+  _avg?: GroupAvgAggregateInputType
+  _sum?: GroupSumAggregateInputType
   _min?: GroupMinAggregateInputType
   _max?: GroupMaxAggregateInputType
 }
@@ -138,8 +214,16 @@ export type GroupGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type GroupGroupByOutputType = {
   id: string
   name: string
+  description: string
+  maxMembers: number | null
+  expiryDate: Date | null
+  latitude: number | null
+  longitude: number | null
+  lastLocation: Date | null
   createdAt: Date
   _count: GroupCountAggregateOutputType | null
+  _avg: GroupAvgAggregateOutputType | null
+  _sum: GroupSumAggregateOutputType | null
   _min: GroupMinAggregateOutputType | null
   _max: GroupMaxAggregateOutputType | null
 }
@@ -165,6 +249,12 @@ export type GroupWhereInput = {
   NOT?: Prisma.GroupWhereInput | Prisma.GroupWhereInput[]
   id?: Prisma.StringFilter<"Group"> | string
   name?: Prisma.StringFilter<"Group"> | string
+  description?: Prisma.StringFilter<"Group"> | string
+  maxMembers?: Prisma.IntNullableFilter<"Group"> | number | null
+  expiryDate?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
+  latitude?: Prisma.FloatNullableFilter<"Group"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Group"> | number | null
+  lastLocation?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   members?: Prisma.UserListRelationFilter
 }
@@ -172,6 +262,12 @@ export type GroupWhereInput = {
 export type GroupOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  maxMembers?: Prisma.SortOrderInput | Prisma.SortOrder
+  expiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   members?: Prisma.UserOrderByRelationAggregateInput
 }
@@ -182,6 +278,12 @@ export type GroupWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.GroupWhereInput[]
   NOT?: Prisma.GroupWhereInput | Prisma.GroupWhereInput[]
   name?: Prisma.StringFilter<"Group"> | string
+  description?: Prisma.StringFilter<"Group"> | string
+  maxMembers?: Prisma.IntNullableFilter<"Group"> | number | null
+  expiryDate?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
+  latitude?: Prisma.FloatNullableFilter<"Group"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Group"> | number | null
+  lastLocation?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   members?: Prisma.UserListRelationFilter
 }, "id">
@@ -189,10 +291,18 @@ export type GroupWhereUniqueInput = Prisma.AtLeast<{
 export type GroupOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  maxMembers?: Prisma.SortOrderInput | Prisma.SortOrder
+  expiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.GroupCountOrderByAggregateInput
+  _avg?: Prisma.GroupAvgOrderByAggregateInput
   _max?: Prisma.GroupMaxOrderByAggregateInput
   _min?: Prisma.GroupMinOrderByAggregateInput
+  _sum?: Prisma.GroupSumOrderByAggregateInput
 }
 
 export type GroupScalarWhereWithAggregatesInput = {
@@ -201,12 +311,24 @@ export type GroupScalarWhereWithAggregatesInput = {
   NOT?: Prisma.GroupScalarWhereWithAggregatesInput | Prisma.GroupScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Group"> | string
   name?: Prisma.StringWithAggregatesFilter<"Group"> | string
+  description?: Prisma.StringWithAggregatesFilter<"Group"> | string
+  maxMembers?: Prisma.IntNullableWithAggregatesFilter<"Group"> | number | null
+  expiryDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Group"> | Date | string | null
+  latitude?: Prisma.FloatNullableWithAggregatesFilter<"Group"> | number | null
+  longitude?: Prisma.FloatNullableWithAggregatesFilter<"Group"> | number | null
+  lastLocation?: Prisma.DateTimeNullableWithAggregatesFilter<"Group"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Group"> | Date | string
 }
 
 export type GroupCreateInput = {
   id?: string
   name: string
+  description: string
+  maxMembers?: number | null
+  expiryDate?: Date | string | null
+  latitude?: number | null
+  longitude?: number | null
+  lastLocation?: Date | string | null
   createdAt?: Date | string
   members?: Prisma.UserCreateNestedManyWithoutGroupsInput
 }
@@ -214,6 +336,12 @@ export type GroupCreateInput = {
 export type GroupUncheckedCreateInput = {
   id?: string
   name: string
+  description: string
+  maxMembers?: number | null
+  expiryDate?: Date | string | null
+  latitude?: number | null
+  longitude?: number | null
+  lastLocation?: Date | string | null
   createdAt?: Date | string
   members?: Prisma.UserUncheckedCreateNestedManyWithoutGroupsInput
 }
@@ -221,6 +349,12 @@ export type GroupUncheckedCreateInput = {
 export type GroupUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.UserUpdateManyWithoutGroupsNestedInput
 }
@@ -228,6 +362,12 @@ export type GroupUpdateInput = {
 export type GroupUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.UserUncheckedUpdateManyWithoutGroupsNestedInput
 }
@@ -235,18 +375,36 @@ export type GroupUncheckedUpdateInput = {
 export type GroupCreateManyInput = {
   id?: string
   name: string
+  description: string
+  maxMembers?: number | null
+  expiryDate?: Date | string | null
+  latitude?: number | null
+  longitude?: number | null
+  lastLocation?: Date | string | null
   createdAt?: Date | string
 }
 
 export type GroupUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GroupUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -263,19 +421,49 @@ export type GroupOrderByRelationAggregateInput = {
 export type GroupCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  maxMembers?: Prisma.SortOrder
+  expiryDate?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  lastLocation?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type GroupAvgOrderByAggregateInput = {
+  maxMembers?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
 }
 
 export type GroupMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  maxMembers?: Prisma.SortOrder
+  expiryDate?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  lastLocation?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type GroupMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  maxMembers?: Prisma.SortOrder
+  expiryDate?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  lastLocation?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type GroupSumOrderByAggregateInput = {
+  maxMembers?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
 }
 
 export type GroupCreateNestedManyWithoutMembersInput = {
@@ -316,15 +504,35 @@ export type GroupUncheckedUpdateManyWithoutMembersNestedInput = {
   deleteMany?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type GroupCreateWithoutMembersInput = {
   id?: string
   name: string
+  description: string
+  maxMembers?: number | null
+  expiryDate?: Date | string | null
+  latitude?: number | null
+  longitude?: number | null
+  lastLocation?: Date | string | null
   createdAt?: Date | string
 }
 
 export type GroupUncheckedCreateWithoutMembersInput = {
   id?: string
   name: string
+  description: string
+  maxMembers?: number | null
+  expiryDate?: Date | string | null
+  latitude?: number | null
+  longitude?: number | null
+  lastLocation?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -355,24 +563,48 @@ export type GroupScalarWhereInput = {
   NOT?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
   id?: Prisma.StringFilter<"Group"> | string
   name?: Prisma.StringFilter<"Group"> | string
+  description?: Prisma.StringFilter<"Group"> | string
+  maxMembers?: Prisma.IntNullableFilter<"Group"> | number | null
+  expiryDate?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
+  latitude?: Prisma.FloatNullableFilter<"Group"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Group"> | number | null
+  lastLocation?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
 }
 
 export type GroupUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GroupUncheckedUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GroupUncheckedUpdateManyWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -410,6 +642,12 @@ export type GroupCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.E
 export type GroupSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
+  maxMembers?: boolean
+  expiryDate?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  lastLocation?: boolean
   createdAt?: boolean
   members?: boolean | Prisma.Group$membersArgs<ExtArgs>
   _count?: boolean | Prisma.GroupCountOutputTypeDefaultArgs<ExtArgs>
@@ -418,22 +656,40 @@ export type GroupSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type GroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
+  maxMembers?: boolean
+  expiryDate?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  lastLocation?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["group"]>
 
 export type GroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
+  maxMembers?: boolean
+  expiryDate?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  lastLocation?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["group"]>
 
 export type GroupSelectScalar = {
   id?: boolean
   name?: boolean
+  description?: boolean
+  maxMembers?: boolean
+  expiryDate?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  lastLocation?: boolean
   createdAt?: boolean
 }
 
-export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt", ExtArgs["result"]["group"]>
+export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "maxMembers" | "expiryDate" | "latitude" | "longitude" | "lastLocation" | "createdAt", ExtArgs["result"]["group"]>
 export type GroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Group$membersArgs<ExtArgs>
   _count?: boolean | Prisma.GroupCountOutputTypeDefaultArgs<ExtArgs>
@@ -449,6 +705,12 @@ export type $GroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    description: string
+    maxMembers: number | null
+    expiryDate: Date | null
+    latitude: number | null
+    longitude: number | null
+    lastLocation: Date | null
     createdAt: Date
   }, ExtArgs["result"]["group"]>
   composites: {}
@@ -876,6 +1138,12 @@ export interface Prisma__GroupClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface GroupFieldRefs {
   readonly id: Prisma.FieldRef<"Group", 'String'>
   readonly name: Prisma.FieldRef<"Group", 'String'>
+  readonly description: Prisma.FieldRef<"Group", 'String'>
+  readonly maxMembers: Prisma.FieldRef<"Group", 'Int'>
+  readonly expiryDate: Prisma.FieldRef<"Group", 'DateTime'>
+  readonly latitude: Prisma.FieldRef<"Group", 'Float'>
+  readonly longitude: Prisma.FieldRef<"Group", 'Float'>
+  readonly lastLocation: Prisma.FieldRef<"Group", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Group", 'DateTime'>
 }
     

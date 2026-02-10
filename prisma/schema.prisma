@@ -30,8 +30,17 @@ model User {
 }
 
 model Group {
-  id        String   @id @default(uuid())
-  name      String
-  members   User[]   @relation("GroupMembers")
-  createdAt DateTime @default(now())
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  members     User[]    @relation("GroupMembers")
+  maxMembers  Int?
+  expiryDate  DateTime?
+
+  // Location
+  latitude     Float?
+  longitude    Float?
+  lastLocation DateTime?
+
+  createdAt   DateTime  @default(now())
 }

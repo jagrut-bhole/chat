@@ -26,3 +26,18 @@ export const userProfileRequest = async () => {
     return error;
   }
 };
+
+/* User Location Request */
+import { LocationSchema } from "@/types/Schemas/AuthSchema";
+
+export const userLocation = async (data : z.infer<typeof LocationSchema>) => {
+  try {
+    const response = await axios.post('/api/auth/location', data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data || error.message;
+    }
+    throw error;
+  }
+}

@@ -612,6 +612,12 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const GroupScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
+  maxMembers: 'maxMembers',
+  expiryDate: 'expiryDate',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  lastLocation: 'lastLocation',
   createdAt: 'createdAt'
 } as const
 

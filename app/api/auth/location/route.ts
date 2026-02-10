@@ -22,13 +22,10 @@ export async function POST(req: NextRequest) : Promise<NextResponse> {
         }
 
         const body = await req.json();
-        console.log("Received body:", body);
 
         const validationResult = locationSchema.safeParse(body);
-        console.log("Validation result:", validationResult);
 
         if (!validationResult.success) {
-            console.log("Validation errors:", validationResult.error.issues);
             return NextResponse.json(
                 {
                     success: false,
