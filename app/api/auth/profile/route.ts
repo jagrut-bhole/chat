@@ -29,6 +29,7 @@ export async function GET() : Promise<NextResponse> {
                 latitude: true,
                 longitude: true,
                 lastLocation: true,
+                groups: true,
             }
         });
 

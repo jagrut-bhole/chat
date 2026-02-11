@@ -30,6 +30,7 @@ export async function getAuthenticatedUser(): Promise<CacheUser | null> {
     const cachedUser = await getCachedData<CacheUser>(cacheKey);
 
     if (cachedUser) {
+      console.log("Cache hit!!");
       return cachedUser;
     }
 
