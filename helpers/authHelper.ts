@@ -1,12 +1,7 @@
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import {
-  CacheTTL,
-  CacheKeys,
-  setCachedData,
-  getCachedData,
-} from "@/lib/upstash-redis/cache";
+import { CacheTTL, CacheKeys, setCachedData, getCachedData } from "@/lib/upstash-redis/cache";
 
 export type CacheUser = {
   id: string;
@@ -14,6 +9,8 @@ export type CacheUser = {
   createdAt: Date;
   lastLocation: Date | null;
   isOnline: boolean;
+  latitude: number | null;
+  longitude: number | null;
 };
 
 export async function getAuthenticatedUser(): Promise<CacheUser | null> {
@@ -47,6 +44,8 @@ export async function getAuthenticatedUser(): Promise<CacheUser | null> {
         createdAt: true,
         lastLocation: true,
         isOnline: true,
+        latitude: true,
+        longitude: true,
       },
     });
 

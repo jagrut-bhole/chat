@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/helpers/authHelper";
 import { AllGroupsResponse } from "./AllGroupsSchema";
+import { getDistanceInKm } from "@/constants/distance";
 
 export async function GET(): Promise<NextResponse<AllGroupsResponse>> {
     try {
@@ -35,7 +36,24 @@ export async function GET(): Promise<NextResponse<AllGroupsResponse>> {
             },
         });
 
-        const formattedGroups = groups.map((group) => ({
+        const MAX_RADIUS_KM = 40;
+
+        const nearbyGroups = groups.filter((group) => {
+            if (!group.latitude || !group.longitude || !user.latitude || !user.longitude) {
+                return false;
+            }
+
+            const distance = getDistanceInKm(
+                user.latitude,
+                user.longitude,
+                group.latitude,
+                group.longitude
+            );
+
+            return distance <= MAX_RADIUS_KM;
+        });
+
+        const formattedGroups = nearbyGroups.map((group) => ({
             id: group.id,
             name: group.name,
             description: group.description,

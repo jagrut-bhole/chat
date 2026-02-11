@@ -1,9 +1,11 @@
 import { z } from "zod";
 
 export const joinedGroupsResponseSchema = z.object({
-    success: z.boolean(),
-    message: z.string(),
-    data: z.array(z.object({
+  success: z.boolean(),
+  message: z.string(),
+  data: z
+    .array(
+      z.object({
         id: z.string(),
         name: z.string(),
         description: z.string(),
@@ -11,7 +13,9 @@ export const joinedGroupsResponseSchema = z.object({
         maxMembers: z.number().nullable(),
         expiryDate: z.string().nullable(),
         createdAt: z.string(),
-    })).optional(),
+      })
+    )
+    .optional(),
 });
 
 export type JoinedGroupsResponse = z.infer<typeof joinedGroupsResponseSchema>;

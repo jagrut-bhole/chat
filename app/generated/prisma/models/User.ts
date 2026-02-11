@@ -49,6 +49,7 @@ export type UserMinAggregateOutputType = {
   longitude: number | null
   lastLocation: Date | null
   isOnline: boolean | null
+  location: string | null
   createdAt: Date | null
 }
 
@@ -63,6 +64,7 @@ export type UserMaxAggregateOutputType = {
   longitude: number | null
   lastLocation: Date | null
   isOnline: boolean | null
+  location: string | null
   createdAt: Date | null
 }
 
@@ -77,6 +79,7 @@ export type UserCountAggregateOutputType = {
   longitude: number
   lastLocation: number
   isOnline: number
+  location: number
   createdAt: number
   _all: number
 }
@@ -105,6 +108,7 @@ export type UserMinAggregateInputType = {
   longitude?: true
   lastLocation?: true
   isOnline?: true
+  location?: true
   createdAt?: true
 }
 
@@ -119,6 +123,7 @@ export type UserMaxAggregateInputType = {
   longitude?: true
   lastLocation?: true
   isOnline?: true
+  location?: true
   createdAt?: true
 }
 
@@ -133,6 +138,7 @@ export type UserCountAggregateInputType = {
   longitude?: true
   lastLocation?: true
   isOnline?: true
+  location?: true
   createdAt?: true
   _all?: true
 }
@@ -234,6 +240,7 @@ export type UserGroupByOutputType = {
   longitude: number | null
   lastLocation: Date | null
   isOnline: boolean
+  location: string | null
   createdAt: Date
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
@@ -271,6 +278,7 @@ export type UserWhereInput = {
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
   lastLocation?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isOnline?: Prisma.BoolFilter<"User"> | boolean
+  location?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   groups?: Prisma.GroupListRelationFilter
 }
@@ -286,6 +294,7 @@ export type UserOrderByWithRelationInput = {
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   isOnline?: Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   groups?: Prisma.GroupOrderByRelationAggregateInput
 }
@@ -304,6 +313,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
   lastLocation?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isOnline?: Prisma.BoolFilter<"User"> | boolean
+  location?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   groups?: Prisma.GroupListRelationFilter
 }, "id" | "username">
@@ -319,6 +329,7 @@ export type UserOrderByWithAggregationInput = {
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   isOnline?: Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
@@ -341,6 +352,7 @@ export type UserScalarWhereWithAggregatesInput = {
   longitude?: Prisma.FloatNullableWithAggregatesFilter<"User"> | number | null
   lastLocation?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   isOnline?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  location?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
@@ -355,6 +367,7 @@ export type UserCreateInput = {
   longitude?: number | null
   lastLocation?: Date | string | null
   isOnline?: boolean
+  location?: string | null
   createdAt?: Date | string
   groups?: Prisma.GroupCreateNestedManyWithoutMembersInput
 }
@@ -370,6 +383,7 @@ export type UserUncheckedCreateInput = {
   longitude?: number | null
   lastLocation?: Date | string | null
   isOnline?: boolean
+  location?: string | null
   createdAt?: Date | string
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutMembersInput
 }
@@ -385,6 +399,7 @@ export type UserUpdateInput = {
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   groups?: Prisma.GroupUpdateManyWithoutMembersNestedInput
 }
@@ -400,6 +415,7 @@ export type UserUncheckedUpdateInput = {
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   groups?: Prisma.GroupUncheckedUpdateManyWithoutMembersNestedInput
 }
@@ -415,6 +431,7 @@ export type UserCreateManyInput = {
   longitude?: number | null
   lastLocation?: Date | string | null
   isOnline?: boolean
+  location?: string | null
   createdAt?: Date | string
 }
 
@@ -429,6 +446,7 @@ export type UserUpdateManyMutationInput = {
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -443,6 +461,7 @@ export type UserUncheckedUpdateManyInput = {
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -457,6 +476,7 @@ export type UserCountOrderByAggregateInput = {
   longitude?: Prisma.SortOrder
   lastLocation?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -477,6 +497,7 @@ export type UserMaxOrderByAggregateInput = {
   longitude?: Prisma.SortOrder
   lastLocation?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -491,6 +512,7 @@ export type UserMinOrderByAggregateInput = {
   longitude?: Prisma.SortOrder
   lastLocation?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -536,6 +558,10 @@ export type NullableFloatFieldUpdateOperationsInput = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -591,6 +617,7 @@ export type UserCreateWithoutGroupsInput = {
   longitude?: number | null
   lastLocation?: Date | string | null
   isOnline?: boolean
+  location?: string | null
   createdAt?: Date | string
 }
 
@@ -605,6 +632,7 @@ export type UserUncheckedCreateWithoutGroupsInput = {
   longitude?: number | null
   lastLocation?: Date | string | null
   isOnline?: boolean
+  location?: string | null
   createdAt?: Date | string
 }
 
@@ -643,6 +671,7 @@ export type UserScalarWhereInput = {
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
   lastLocation?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isOnline?: Prisma.BoolFilter<"User"> | boolean
+  location?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
@@ -657,6 +686,7 @@ export type UserUpdateWithoutGroupsInput = {
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -671,6 +701,7 @@ export type UserUncheckedUpdateWithoutGroupsInput = {
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -685,6 +716,7 @@ export type UserUncheckedUpdateManyWithoutGroupsInput = {
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastLocation?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -730,6 +762,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   longitude?: boolean
   lastLocation?: boolean
   isOnline?: boolean
+  location?: boolean
   createdAt?: boolean
   groups?: boolean | Prisma.User$groupsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -746,6 +779,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   longitude?: boolean
   lastLocation?: boolean
   isOnline?: boolean
+  location?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -760,6 +794,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   longitude?: boolean
   lastLocation?: boolean
   isOnline?: boolean
+  location?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -774,10 +809,11 @@ export type UserSelectScalar = {
   longitude?: boolean
   lastLocation?: boolean
   isOnline?: boolean
+  location?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "password" | "failedLoginAttempts" | "lockedUntil" | "lastLoginAt" | "latitude" | "longitude" | "lastLocation" | "isOnline" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "password" | "failedLoginAttempts" | "lockedUntil" | "lastLoginAt" | "latitude" | "longitude" | "lastLocation" | "isOnline" | "location" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   groups?: boolean | Prisma.User$groupsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -801,6 +837,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     longitude: number | null
     lastLocation: Date | null
     isOnline: boolean
+    location: string | null
     createdAt: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
@@ -1236,6 +1273,7 @@ export interface UserFieldRefs {
   readonly longitude: Prisma.FieldRef<"User", 'Float'>
   readonly lastLocation: Prisma.FieldRef<"User", 'DateTime'>
   readonly isOnline: Prisma.FieldRef<"User", 'Boolean'>
+  readonly location: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     

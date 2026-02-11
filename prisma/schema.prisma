@@ -26,6 +26,9 @@ model User {
   lastLocation DateTime?
   isOnline     Boolean   @default(false)
 
+  // Text location based on geocoding
+  location String?
+
   createdAt DateTime @default(now())
 }
 

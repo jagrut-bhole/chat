@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { geoLocation, formatLocation } from "@/lib/geocode";
 
 // Schema
 import { SignupSchemaRequest, SignupResponse } from "./SignupSchema";
@@ -9,7 +10,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<SignupRespons
   try {
     const body = await req.json();
 
-    // Zod schema validation (handles username/password requirements automatically)
     const validationResult = SignupSchemaRequest.safeParse(body);
 
     if (!validationResult.success) {
@@ -24,9 +24,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<SignupRespons
       );
     }
 
-    const { username, password } = validationResult.data;
+    const { username, password, latitude, longitude } = validationResult.data;
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: {
         username: username,
@@ -34,7 +33,6 @@ export async function POST(req: NextRequest): Promise<NextResponse<SignupRespons
     });
 
     if (existingUser) {
-      // ✅ FIXED: if user EXISTS, return error
       return NextResponse.json(
         {
           success: false,
@@ -46,14 +44,41 @@ export async function POST(req: NextRequest): Promise<NextResponse<SignupRespons
       );
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create user
+    let locationData: {
+      latitude?: number;
+      longitude?: number;
+      location?: string;
+      lastLocation?: Date;
+    } = {};
+
+    if (latitude !== undefined && longitude !== undefined) {
+      try {
+        const geocodeResult = await geoLocation({ latitude, longitude });
+        const formattedLocation = formatLocation(geocodeResult);
+
+        locationData = {
+          latitude,
+          longitude,
+          location: formattedLocation,
+          lastLocation: new Date(),
+        };
+      } catch (error) {
+        console.error("Geocoding error during signup:", error);
+        locationData = {
+          latitude,
+          longitude,
+          lastLocation: new Date(),
+        };
+      }
+    }
+
     const user = await prisma.user.create({
       data: {
         username: username,
         password: hashedPassword,
+        ...locationData,
       },
       select: {
         id: true,
@@ -68,7 +93,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<SignupRespons
       user: {
         id: user.id,
         username: user.username,
-        createdAt: user.createdAt.toISOString(), // ✅ FIXED: Convert to string
+        createdAt: user.createdAt.toISOString(),
       },
     });
   } catch (error) {

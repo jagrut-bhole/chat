@@ -7,150 +7,155 @@ import CreateGroupDialog from "@/components/CreateGroupDialog";
 import { Button } from "@/components/ui/button";
 import { Plus, ArrowRight } from "lucide-react";
 
-import { createGroupRequest, joinGroupRequest, fetchJoinedGroupsRequest, fetchAllGroupsRequest } from "@/api-axios/groupRequest";
+import {
+  createGroupRequest,
+  joinGroupRequest,
+  fetchJoinedGroupsRequest,
+  fetchAllGroupsRequest,
+} from "@/api-axios/groupRequest";
 import { toast } from "sonner";
 
 interface Group {
-    id: string;
-    name: string;
-    description: string;
-    memberCount: number;
-    maxMembers?: number | null;
-    expiryDate?: string | null;
-    createdAt: string;
+  id: string;
+  name: string;
+  description: string;
+  memberCount: number;
+  maxMembers?: number | null;
+  expiryDate?: string | null;
+  createdAt: string;
 }
 
 type TabKey = "joined" | "all";
 export default function Dashboard() {
-    const [joinedGroups, setJoinedGroups] = useState<Group[]>([]);
-    const [allGroups, setAllGroups] = useState<Group[]>([]);
-    const [activeTab, setActiveTab] = useState<TabKey>("joined");
-    const [direction, setDirection] = useState<"left" | "right">("left");
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [createDialogOpen, setCreateDialogOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [createLoading, setCreateLoading] = useState(false);
-    const [joinLoading, setJoinLoading] = useState(false);
+  const [joinedGroups, setJoinedGroups] = useState<Group[]>([]);
+  const [allGroups, setAllGroups] = useState<Group[]>([]);
+  const [activeTab, setActiveTab] = useState<TabKey>("joined");
+  const [direction, setDirection] = useState<"left" | "right">("left");
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [createLoading, setCreateLoading] = useState(false);
+  const [joinLoading, setJoinLoading] = useState(false);
 
-    // Fetch groups on mount
-    useEffect(() => {
-        fetchGroups();
-    }, []);
+  // Fetch groups on mount
+  useEffect(() => {
+    fetchGroups();
+  }, []);
 
-    const fetchGroups = async () => {
-        setLoading(true);
-        try {
-            const [joinedResponse, allResponse] = await Promise.all([
-                fetchJoinedGroupsRequest(),
-                fetchAllGroupsRequest(),
-            ]);
+  const fetchGroups = async () => {
+    setLoading(true);
+    try {
+      const [joinedResponse, allResponse] = await Promise.all([
+        fetchJoinedGroupsRequest(),
+        fetchAllGroupsRequest(),
+      ]);
 
-            if (joinedResponse.success && joinedResponse.data) {
-                setJoinedGroups(joinedResponse.data);
-            }
+      if (joinedResponse.success && joinedResponse.data) {
+        setJoinedGroups(joinedResponse.data);
+      }
 
-            if (allResponse.success && allResponse.data) {
-                setAllGroups(allResponse.data);
-            }
-        } catch (error) {
-            console.error("Error fetching groups:", error);
-            toast.error("Failed to load groups");
-        } finally {
-            setLoading(false);
-        }
-    };
+      if (allResponse.success && allResponse.data) {
+        setAllGroups(allResponse.data);
+      }
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+      toast.error("Failed to load groups");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const switchTab = (tab: TabKey) => {
-        if (tab === activeTab || isAnimating) return;
-        setDirection(tab === "all" ? "left" : "right");
-        setIsAnimating(true);
-        setTimeout(() => {
-            setActiveTab(tab);
-            setIsAnimating(false);
-        }, 250);
-    };
+  const switchTab = (tab: TabKey) => {
+    if (tab === activeTab || isAnimating) return;
+    setDirection(tab === "all" ? "left" : "right");
+    setIsAnimating(true);
+    setTimeout(() => {
+      setActiveTab(tab);
+      setIsAnimating(false);
+    }, 250);
+  };
 
-    const handleCreateGroup = async (newGroup: {
-        name: string;
-        description: string;
-        maxMembers?: number;
-        expiryDate?: Date;
-    }) => {
-        try {
-            // Get user's current location
-            if (!navigator.geolocation) {
-                toast.error("Geolocation is not supported by your browser");
-                return;
-            }
+  const handleCreateGroup = async (newGroup: {
+    name: string;
+    description: string;
+    maxMembers?: number;
+    expiryDate?: Date;
+  }) => {
+    try {
+      // Get user's current location
+      if (!navigator.geolocation) {
+        toast.error("Geolocation is not supported by your browser");
+        return;
+      }
 
-            setCreateLoading(true);
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    try {
-                        const response = await createGroupRequest({
-                            groupName: newGroup.name,
-                            description: newGroup.description || "",
-                            maxMembers: newGroup.maxMembers,
-                            expiryDate: newGroup.expiryDate?.toISOString(),
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                        });
+      setCreateLoading(true);
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const response = await createGroupRequest({
+              groupName: newGroup.name,
+              description: newGroup.description || "",
+              maxMembers: newGroup.maxMembers,
+              expiryDate: newGroup.expiryDate?.toISOString(),
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
 
-                        if (response.success) {
-                            toast.success("Group created successfully!");
-                            // Refresh groups
-                            await fetchGroups();
-                            setActiveTab("joined");
-                            setCreateDialogOpen(false);
-                        }
-                    } catch (error: unknown) {
-                        console.error("Error creating group:", error);
-                        toast.error(error instanceof Error ? error.message : "Failed to create group");
-                    } finally {
-                        setCreateLoading(false);
-                    }
-                },
-                (error) => {
-                    console.error("Error getting location:", error);
-                    toast.error("Failed to get your location. Please enable location access.");
-                    setCreateLoading(false);
-                }
-            );
-        } catch (error) {
-            console.error("Error in handleCreateGroup:", error);
-            toast.error("Failed to create group");
-            setCreateLoading(false);
-        }
-    };
-
-    const handleJoin = async (id: string) => {
-        setJoinLoading(true);
-        try {
-            const response = await joinGroupRequest({ groupId: id });
-            
             if (response.success) {
-                toast.success("Successfully joined the group!");
-                // Refresh groups
-                await fetchGroups();
+              toast.success("Group created successfully!");
+              // Refresh groups
+              await fetchGroups();
+              setActiveTab("joined");
+              setCreateDialogOpen(false);
             }
-        } catch (error: unknown) {
-            console.error("Error joining group:", error);
-            toast.error(error instanceof Error ? error.message : "Failed to join group");
-        } finally {
-            setJoinLoading(false);
+          } catch (error: unknown) {
+            console.error("Error creating group:", error);
+            toast.error(error instanceof Error ? error.message : "Failed to create group");
+          } finally {
+            setCreateLoading(false);
+          }
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          toast.error("Failed to get your location. Please enable location access.");
+          setCreateLoading(false);
         }
-    };
+      );
+    } catch (error) {
+      console.error("Error in handleCreateGroup:", error);
+      toast.error("Failed to create group");
+      setCreateLoading(false);
+    }
+  };
 
-    const slideOut = isAnimating
-        ? direction === "left"
-            ? "animate-slide-out-left"
-            : "animate-slide-out-right"
-        : "";
-    const slideIn = !isAnimating
-        ? direction === "left"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
-        : "";
+  const handleJoin = async (id: string) => {
+    setJoinLoading(true);
+    try {
+      const response = await joinGroupRequest({ groupId: id });
+
+      if (response.success) {
+        toast.success("Successfully joined the group!");
+        // Refresh groups
+        await fetchGroups();
+      }
+    } catch (error: unknown) {
+      console.error("Error joining group:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to join group");
+    } finally {
+      setJoinLoading(false);
+    }
+  };
+
+  const slideOut = isAnimating
+    ? direction === "left"
+      ? "animate-slide-out-left"
+      : "animate-slide-out-right"
+    : "";
+  const slideIn = !isAnimating
+    ? direction === "left"
+      ? "animate-slide-in-right"
+      : "animate-slide-in-left"
+    : "";
 
   return (
     <div className="min-h-screen bg-black">
@@ -169,9 +174,7 @@ export default function Dashboard() {
           {/* Title row + Create button */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-white tracking-tight">
-                Groups
-              </h1>
+              <h1 className="text-2xl font-bold text-white tracking-tight">Groups</h1>
               <p className="text-sm text-zinc-400 mt-1">
                 Join anonymous communities or create your own
               </p>
@@ -202,9 +205,7 @@ export default function Dashboard() {
                 Joined Groups
                 <span
                   className={`ml-2 text-xs rounded-full px-2 py-0.5 ${
-                    activeTab === "joined"
-                      ? "bg-black/30 text-white"
-                      : "bg-black/20 text-zinc-500"
+                    activeTab === "joined" ? "bg-black/30 text-white" : "bg-black/20 text-zinc-500"
                   }`}
                 >
                   {joinedGroups.length}
@@ -221,9 +222,7 @@ export default function Dashboard() {
                 All Groups
                 <span
                   className={`ml-2 text-xs rounded-full px-2 py-0.5 ${
-                    activeTab === "all"
-                      ? "bg-black/30 text-white"
-                      : "bg-black/20 text-zinc-500"
+                    activeTab === "all" ? "bg-black/30 text-white" : "bg-black/20 text-zinc-500"
                   }`}
                 >
                   {allGroups.length}
@@ -248,12 +247,9 @@ export default function Dashboard() {
                         👋
                       </div>
                       <div>
-                        <p className="text-white font-medium text-lg mb-1">
-                          No groups yet
-                        </p>
+                        <p className="text-white font-medium text-lg mb-1">No groups yet</p>
                         <p className="text-zinc-500 text-sm">
-                          You haven&apos;t joined any groups yet. Get started
-                          below.
+                          You haven&apos;t joined any groups yet. Get started below.
                         </p>
                       </div>
                       <div className="flex gap-3 mt-2">
@@ -267,7 +263,7 @@ export default function Dashboard() {
                         <Button
                           variant="outline"
                           onClick={() => switchTab("all")}
-                          className="gap-1.5 bg-white text-black cursor-pointer hover:bg-zinc-200" 
+                          className="gap-1.5 bg-white text-black cursor-pointer hover:bg-zinc-200"
                         >
                           Join a Group
                           <ArrowRight className="h-4 w-4" />
@@ -298,9 +294,7 @@ export default function Dashboard() {
                       <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-3xl mb-4">
                         🎉
                       </div>
-                      <p className="text-white font-medium text-lg mb-1">
-                        All caught up!
-                      </p>
+                      <p className="text-white font-medium text-lg mb-1">All caught up!</p>
                       <p className="text-zinc-500 text-sm">
                         No groups available to join right now.
                       </p>

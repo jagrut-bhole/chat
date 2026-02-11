@@ -8,6 +8,8 @@ export const SignupSchemaRequest = z.object({
     .trim()
     .regex(/^[a-zA-Z0-9_]+$/),
   password: z.string().min(6).max(100).trim(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
 });
 
 export type SignupRequest = z.infer<typeof SignupSchemaRequest>;

@@ -32,7 +32,7 @@ import { LocationSchema } from "@/types/Schemas/AuthSchema";
 
 export const userLocation = async (data: z.infer<typeof LocationSchema>) => {
   try {
-    const response = await axios.post('/api/auth/location', data);
+    const response = await axios.post("/api/auth/location", data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -40,7 +40,7 @@ export const userLocation = async (data: z.infer<typeof LocationSchema>) => {
     }
     throw error;
   }
-}
+};
 
 /* Change Password Request */
 
@@ -56,15 +56,15 @@ export const changePasswordRequest = async (data: z.infer<typeof ChangePasswordS
     }
     throw error;
   }
-}
+};
 
 /* Updating Users Location */
 
-import { UpdateLocationSchema } from '@/types/Schemas/AuthSchema'
+import { UpdateLocationSchema } from "@/types/Schemas/AuthSchema";
 
 export const updateLocation = async (data: z.infer<typeof UpdateLocationSchema>) => {
   try {
-    const response = await axios.post('/api/auth/location', data)
+    const response = await axios.post("/api/auth/location", data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -72,4 +72,4 @@ export const updateLocation = async (data: z.infer<typeof UpdateLocationSchema>)
     }
     throw error;
   }
-}
+};

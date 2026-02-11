@@ -82,6 +82,7 @@ export const UserScalarFieldEnum = {
   longitude: 'longitude',
   lastLocation: 'lastLocation',
   isOnline: 'isOnline',
+  location: 'location',
   createdAt: 'createdAt'
 } as const
 

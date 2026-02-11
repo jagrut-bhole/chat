@@ -27,16 +27,19 @@ export const UserProfileSchema = z.object({
     latitude: z.number().nullable(),
     longitude: z.number().nullable(),
     lastLocation: z.string().nullable(),
-    groups: z.array(z.object({
-      id: z.string(),
-      name: z.string(),
-      description: z.string(),
-      maxMembers: z.number().nullable(),
-      expiryDate: z.string().nullable(),
-      latitude: z.number().nullable(),
-      longitude: z.number().nullable(),
-      lastLocation: z.string().nullable(),
-    })),
+    location: z.string().nullable(),
+    groups: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string(),
+        maxMembers: z.number().nullable(),
+        expiryDate: z.string().nullable(),
+        latitude: z.number().nullable(),
+        longitude: z.number().nullable(),
+        lastLocation: z.string().nullable(),
+      })
+    ),
   }),
 });
 
@@ -44,7 +47,6 @@ export const ChangePasswordSchema = z.object({
   currentPassword: z.string().min(6, "Current password must be at least 6 characters long"),
   newPassword: z.string().min(6, "New password must be at least 6 characters long"),
 });
-
 
 export const UpdateLocationSchema = z.object({
   latitude: z.number(),

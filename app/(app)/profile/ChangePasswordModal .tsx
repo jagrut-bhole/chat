@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { X, Lock, ShieldCheck, KeyRound } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { changePasswordRequest } from '@/api-axios/authRequest';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { X, Lock, ShieldCheck, KeyRound } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { changePasswordRequest } from "@/api-axios/authRequest";
+import { toast } from "sonner";
 
 interface ChangePasswordModalProps {
   isOpen: boolean;
@@ -11,9 +11,9 @@ interface ChangePasswordModalProps {
 
 const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClose }) => {
   const [passwords, setPasswords] = useState({
-    current: '',
-    new: '',
-    confirm: ''
+    current: "",
+    new: "",
+    confirm: "",
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,7 +39,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
 
       if (response.success) {
         toast.success(response.message || "Password changed successfully!");
-        setPasswords({ current: '', new: '', confirm: '' });
+        setPasswords({ current: "", new: "", confirm: "" });
         onClose();
       } else {
         toast.error(response.message || "Failed to change password");
@@ -88,7 +88,10 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                 <div className="space-y-1.5">
                   <label className="text-sm font-semibold text-zinc-300">Current Password</label>
                   <div className="relative">
-                    <KeyRound size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                    <KeyRound
+                      size={16}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"
+                    />
                     <input
                       required
                       type="password"
@@ -104,7 +107,10 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                 <div className="space-y-1.5">
                   <label className="text-sm font-semibold text-zinc-300">New Password</label>
                   <div className="relative">
-                    <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                    <Lock
+                      size={16}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"
+                    />
                     <input
                       required
                       type="password"
@@ -118,9 +124,14 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-zinc-300">Confirm New Password</label>
+                  <label className="text-sm font-semibold text-zinc-300">
+                    Confirm New Password
+                  </label>
                   <div className="relative">
-                    <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                    <Lock
+                      size={16}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"
+                    />
                     <input
                       required
                       type="password"
@@ -147,7 +158,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                     className="flex-1 px-4 py-2.5 rounded-xl bg-white text-black font-semibold hover:bg-zinc-200 shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={isLoading}
                   >
-                    {isLoading ? 'Updating...' : 'Update Password'}
+                    {isLoading ? "Updating..." : "Update Password"}
                   </button>
                 </div>
               </form>
