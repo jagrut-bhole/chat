@@ -37,7 +37,7 @@ export const createGroupResponseSchema = z.object({
       name: z.string(),
       description: z.string(),
       maxMembers: z.number().int().nullable(),
-      expiryDate: z.date().nullable(),
+      expiresAt: z.date().nullable(),
       createdAt: z.date(),
     })
     .optional(),

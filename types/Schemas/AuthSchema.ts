@@ -28,16 +28,19 @@ export const UserProfileSchema = z.object({
     longitude: z.number().nullable(),
     lastLocation: z.string().nullable(),
     location: z.string().nullable(),
-    groups: z.array(
+    groupMemberships: z.array(
       z.object({
         id: z.string(),
-        name: z.string(),
-        description: z.string(),
-        maxMembers: z.number().nullable(),
-        expiryDate: z.string().nullable(),
-        latitude: z.number().nullable(),
-        longitude: z.number().nullable(),
-        lastLocation: z.string().nullable(),
+        userId: z.string(),
+        groupId: z.string(),
+        joinedAt: z.string(),
+        group: z.object({
+          id: z.string(),
+          name: z.string(),
+          description: z.string(),
+          maxMembers: z.number().nullable(),
+          expiresAt: z.string().nullable(),
+        }),
       })
     ),
   }),

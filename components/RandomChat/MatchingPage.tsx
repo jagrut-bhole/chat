@@ -48,7 +48,7 @@ const MatchingPage: React.FC<MatchingPageProps> = ({ onCancel }) => {
 
             <button
                 onClick={onCancel}
-                className="mt-12 flex items-center gap-2 px-6 py-3 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all group"
+                className="mt-12 flex items-center gap-2 px-6 py-3 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all group cursor-pointer"
             >
                 <X size={18} className="transition-transform" />
                 <span>Cancel Search</span>

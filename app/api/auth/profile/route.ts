@@ -30,7 +30,23 @@ export async function GET(): Promise<NextResponse> {
         longitude: true,
         lastLocation: true,
         location: true,
-        groups: true,
+        groupMemberships: {
+          select: {
+            id: true,
+            userId: true,
+            groupId: true,
+            joinedAt: true,
+            group: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                maxMembers: true,
+                expiresAt: true,
+              },
+            },
+          },
+        },
       },
     });
 

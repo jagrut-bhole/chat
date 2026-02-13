@@ -170,7 +170,7 @@ export default function Profile() {
                     Groups Created
                   </p>
                   <p className="text-base font-semibold text-zinc-200">
-                    {profileData.groups.length} Groups
+                    {profileData.groupMemberships.length} Groups
                   </p>
                 </div>
               </div>

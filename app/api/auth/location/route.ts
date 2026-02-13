@@ -5,7 +5,7 @@ import { geoLocation, formatLocation } from "@/lib/geocode";
 
 import { locationSchema } from "./LocationSchema";
 
-export async function PATCH(req: NextRequest): Promise<NextResponse> {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const user = await getAuthenticatedUser();
 

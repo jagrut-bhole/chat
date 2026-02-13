@@ -49,13 +49,13 @@ const RandomChatModal: React.FC<RandomChatModalProps> = ({ isOpen, onClose, onCo
                                 <div className="flex gap-3">
                                     <button
                                         onClick={onClose}
-                                        className="flex-1 px-4 py-3 rounded-xl text-zinc-300 font-medium hover:bg-zinc-800 transition-colors"
+                                        className="flex-1 px-4 py-3 rounded-xl text-zinc-300 font-medium hover:bg-zinc-800 transition-colors cursor-pointer"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         onClick={onConfirm}
-                                        className="flex-1 px-4 py-3 rounded-xl bg-white text-black font-bold hover:bg-zinc-200 shadow-lg shadow-white/5 transition-all active:scale-95"
+                                        className="flex-1 px-4 py-3 rounded-xl bg-white text-black font-bold hover:bg-zinc-200 shadow-lg shadow-white/5 transition-all active:scale-95 cursor-pointer"
                                     >
                                         Start Searching
                                     </button>

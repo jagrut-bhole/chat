@@ -19,7 +19,7 @@ export const GroupSchema = z.object({
   description: z.string(),
   memberCount: z.number(),
   maxMembers: z.number().nullable(),
-  expiryDate: z.string().nullable(),
+  expiryDate: z.string().nullable(), // API still returns as "expiryDate" for frontend compatibility
   createdAt: z.string(),
 });
 
@@ -28,3 +28,4 @@ export const GroupsResponseSchema = z.object({
   message: z.string(),
   data: z.array(GroupSchema).optional(),
 });
+
