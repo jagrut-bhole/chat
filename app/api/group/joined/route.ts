@@ -19,30 +19,35 @@ export async function GET(): Promise<NextResponse<JoinedGroupsResponse>> {
       );
     }
 
-    const groups = await prisma.group.findMany({
+    // Fetch groups the user has joined via GroupMember junction table
+    const groupMemberships = await prisma.groupMember.findMany({
       where: {
-        members: {
-          some: {
-            id: user.id,
+        userId: user.id,
+      },
+      include: {
+        group: {
+          include: {
+            _count: {
+              select: {
+                groupMembers: true,
+              },
+            },
           },
         },
       },
-      include: {
-        members: true,
-      },
       orderBy: {
-        createdAt: "desc",
+        joinedAt: "desc",
       },
     });
 
-    const formattedGroups = groups.map((group) => ({
-      id: group.id,
-      name: group.name,
-      description: group.description,
-      memberCount: group.members.length,
-      maxMembers: group.maxMembers,
-      expiryDate: group.expiryDate?.toISOString() || null,
-      createdAt: group.createdAt.toISOString(),
+    const formattedGroups = groupMemberships.map((membership) => ({
+      id: membership.group.id,
+      name: membership.group.name,
+      description: membership.group.description,
+      memberCount: membership.group._count.groupMembers,
+      maxMembers: membership.group.maxMembers,
+      expiryDate: membership.group.expiresAt?.toISOString() || null,
+      createdAt: membership.group.createdAt.toISOString(),
     }));
 
     return NextResponse.json(

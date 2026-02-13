@@ -27,3 +27,23 @@ export type User = Prisma.UserModel
  * 
  */
 export type Group = Prisma.GroupModel
+/**
+ * Model GroupMember
+ * 
+ */
+export type GroupMember = Prisma.GroupMemberModel
+/**
+ * Model GroupMessage
+ * 
+ */
+export type GroupMessage = Prisma.GroupMessageModel
+/**
+ * Model PrivateChat
+ * 
+ */
+export type PrivateChat = Prisma.PrivateChatModel
+/**
+ * Model PrivateMessage
+ * 
+ */
+export type PrivateMessage = Prisma.PrivateMessageModel

@@ -22,14 +22,18 @@ export async function GET(): Promise<NextResponse<AllGroupsResponse>> {
 
         const groups = await prisma.group.findMany({
             where: {
-                members: {
+                groupMembers: {
                     none: {
-                        id: user.id,
+                        userId: user.id,
                     },
                 },
             },
             include: {
-                members: true,
+                _count: {
+                    select: {
+                        groupMembers: true,
+                    },
+                },
             },
             orderBy: {
                 createdAt: "desc",
@@ -57,9 +61,9 @@ export async function GET(): Promise<NextResponse<AllGroupsResponse>> {
             id: group.id,
             name: group.name,
             description: group.description,
-            memberCount: group.members.length,
+            memberCount: group._count.groupMembers,
             maxMembers: group.maxMembers,
-            expiryDate: group.expiryDate?.toISOString() || null,
+            expiryDate: group.expiresAt?.toISOString() || null,
             createdAt: group.createdAt.toISOString(),
         }));
 

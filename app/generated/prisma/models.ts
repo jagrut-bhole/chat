@@ -10,4 +10,8 @@
  */
 export type * from './models/User'
 export type * from './models/Group'
+export type * from './models/GroupMember'
+export type * from './models/GroupMessage'
+export type * from './models/PrivateChat'
+export type * from './models/PrivateMessage'
 export type * from './commonInputTypes'

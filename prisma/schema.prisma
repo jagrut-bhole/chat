@@ -17,33 +17,98 @@ model User {
   lockedUntil         DateTime?
   lastLoginAt         DateTime?
 
-  // user's groups
-  groups Group[] @relation("GroupMembers")
-
   //users location
   latitude     Float?
   longitude    Float?
   lastLocation DateTime?
   isOnline     Boolean   @default(false)
+  location     String? // Text location based on geocoding
 
-  // Text location based on geocoding
-  location String?
 
   createdAt DateTime @default(now())
+
+  groupMemberships    GroupMember[]
+  groupMessages       GroupMessage[]
+  privateChatsAsUser1 PrivateChat[]    @relation("User1Chats")
+  privateChatsAsUser2 PrivateChat[]    @relation("User2Chats")
+  privateMessages     PrivateMessage[]
 }
 
 model Group {
-  id          String    @id @default(uuid())
+  id          String @id @default(uuid())
   name        String
   description String
-  members     User[]    @relation("GroupMembers")
-  maxMembers  Int?
-  expiryDate  DateTime?
 
   // Location
-  latitude     Float?
-  longitude    Float?
-  lastLocation DateTime?
+  latitude      Float?
+  longitude     Float?
+  radius        Float?
+  lastLocation  DateTime?
+  maxMembers    Int?
+  expiresAt     DateTime?
+  createdAt     DateTime       @default(now())
+  groupMembers  GroupMember[]
+  groupMessages GroupMessage[]
 
-  createdAt   DateTime  @default(now())
+  @@index([latitude, longitude])
+  @@index([expiresAt])
+}
+
+model GroupMember {
+  id       String   @id @default(uuid())
+  userId   String
+  groupId  String
+  joinedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, groupId])
+  @@index([groupId])
+}
+
+model GroupMessage {
+  id        String   @id @default(uuid())
+  groupId   String
+  userId    String
+  content   String?
+  mediaUrl  String?
+  mediaType String?
+  createdAt DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([groupId, createdAt])
+}
+
+model PrivateChat {
+  id        String    @id @default(uuid())
+  user1Id   String
+  user2Id   String
+  status    String    @default("active") // active, ended
+  createdAt DateTime  @default(now())
+  endedAt   DateTime?
+
+  user1    User             @relation("User1Chats", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2    User             @relation("User2Chats", fields: [user2Id], references: [id], onDelete: Cascade)
+  messages PrivateMessage[]
+
+  @@index([user1Id, user2Id])
+  @@index([status])
+}
+
+model PrivateMessage {
+  id        String   @id @default(uuid())
+  chatId    String
+  senderId  String
+  content   String?
+  mediaUrl  String?
+  mediaType String?
+  createdAt DateTime @default(now())
+
+  chat   PrivateChat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender User        @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([chatId, createdAt])
 }

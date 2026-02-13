@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id       String @id @default(uuid())\n  username String @unique\n  password String\n\n  // Account security fields\n  failedLoginAttempts Int       @default(0)\n  lockedUntil         DateTime?\n  lastLoginAt         DateTime?\n\n  // user's groups\n  groups Group[] @relation(\"GroupMembers\")\n\n  //users location\n  latitude     Float?\n  longitude    Float?\n  lastLocation DateTime?\n  isOnline     Boolean   @default(false)\n\n  // Text location based on geocoding\n  location String?\n\n  createdAt DateTime @default(now())\n}\n\nmodel Group {\n  id          String    @id @default(uuid())\n  name        String\n  description String\n  members     User[]    @relation(\"GroupMembers\")\n  maxMembers  Int?\n  expiryDate  DateTime?\n\n  // Location\n  latitude     Float?\n  longitude    Float?\n  lastLocation DateTime?\n\n  createdAt DateTime @default(now())\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id       String @id @default(uuid())\n  username String @unique\n  password String\n\n  // Account security fields\n  failedLoginAttempts Int       @default(0)\n  lockedUntil         DateTime?\n  lastLoginAt         DateTime?\n\n  //users location\n  latitude     Float?\n  longitude    Float?\n  lastLocation DateTime?\n  isOnline     Boolean   @default(false)\n  location     String? // Text location based on geocoding\n\n  createdAt DateTime @default(now())\n\n  groupMemberships    GroupMember[]\n  groupMessages       GroupMessage[]\n  privateChatsAsUser1 PrivateChat[]    @relation(\"User1Chats\")\n  privateChatsAsUser2 PrivateChat[]    @relation(\"User2Chats\")\n  privateMessages     PrivateMessage[]\n}\n\nmodel Group {\n  id          String @id @default(uuid())\n  name        String\n  description String\n\n  // Location\n  latitude      Float?\n  longitude     Float?\n  radius        Float?\n  lastLocation  DateTime?\n  maxMembers    Int?\n  expiresAt     DateTime?\n  createdAt     DateTime       @default(now())\n  groupMembers  GroupMember[]\n  groupMessages GroupMessage[]\n\n  @@index([latitude, longitude])\n  @@index([expiresAt])\n}\n\nmodel GroupMember {\n  id       String   @id @default(uuid())\n  userId   String\n  groupId  String\n  joinedAt DateTime @default(now())\n\n  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)\n  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)\n\n  @@unique([userId, groupId])\n  @@index([groupId])\n}\n\nmodel GroupMessage {\n  id        String   @id @default(uuid())\n  groupId   String\n  userId    String\n  content   String?\n  mediaUrl  String?\n  mediaType String?\n  createdAt DateTime @default(now())\n\n  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)\n  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([groupId, createdAt])\n}\n\nmodel PrivateChat {\n  id        String    @id @default(uuid())\n  user1Id   String\n  user2Id   String\n  status    String    @default(\"active\") // active, ended\n  createdAt DateTime  @default(now())\n  endedAt   DateTime?\n\n  user1    User             @relation(\"User1Chats\", fields: [user1Id], references: [id], onDelete: Cascade)\n  user2    User             @relation(\"User2Chats\", fields: [user2Id], references: [id], onDelete: Cascade)\n  messages PrivateMessage[]\n\n  @@index([user1Id, user2Id])\n  @@index([status])\n}\n\nmodel PrivateMessage {\n  id        String   @id @default(uuid())\n  chatId    String\n  senderId  String\n  content   String?\n  mediaUrl  String?\n  mediaType String?\n  createdAt DateTime @default(now())\n\n  chat   PrivateChat @relation(fields: [chatId], references: [id], onDelete: Cascade)\n  sender User        @relation(fields: [senderId], references: [id], onDelete: Cascade)\n\n  @@index([chatId, createdAt])\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"failedLoginAttempts\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"lockedUntil\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"lastLoginAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"groups\",\"kind\":\"object\",\"type\":\"Group\",\"relationName\":\"GroupMembers\"},{\"name\":\"latitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"longitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"lastLocation\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"isOnline\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Group\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"members\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"GroupMembers\"},{\"name\":\"maxMembers\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"expiryDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"latitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"longitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"lastLocation\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"failedLoginAttempts\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"lockedUntil\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"lastLoginAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"latitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"longitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"lastLocation\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"isOnline\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"groupMemberships\",\"kind\":\"object\",\"type\":\"GroupMember\",\"relationName\":\"GroupMemberToUser\"},{\"name\":\"groupMessages\",\"kind\":\"object\",\"type\":\"GroupMessage\",\"relationName\":\"GroupMessageToUser\"},{\"name\":\"privateChatsAsUser1\",\"kind\":\"object\",\"type\":\"PrivateChat\",\"relationName\":\"User1Chats\"},{\"name\":\"privateChatsAsUser2\",\"kind\":\"object\",\"type\":\"PrivateChat\",\"relationName\":\"User2Chats\"},{\"name\":\"privateMessages\",\"kind\":\"object\",\"type\":\"PrivateMessage\",\"relationName\":\"PrivateMessageToUser\"}],\"dbName\":null},\"Group\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"latitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"longitude\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"radius\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"lastLocation\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"maxMembers\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"groupMembers\",\"kind\":\"object\",\"type\":\"GroupMember\",\"relationName\":\"GroupToGroupMember\"},{\"name\":\"groupMessages\",\"kind\":\"object\",\"type\":\"GroupMessage\",\"relationName\":\"GroupToGroupMessage\"}],\"dbName\":null},\"GroupMember\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"groupId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"joinedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"GroupMemberToUser\"},{\"name\":\"group\",\"kind\":\"object\",\"type\":\"Group\",\"relationName\":\"GroupToGroupMember\"}],\"dbName\":null},\"GroupMessage\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"groupId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mediaUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mediaType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"group\",\"kind\":\"object\",\"type\":\"Group\",\"relationName\":\"GroupToGroupMessage\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"GroupMessageToUser\"}],\"dbName\":null},\"PrivateChat\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user1Id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user2Id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user1\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"User1Chats\"},{\"name\":\"user2\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"User2Chats\"},{\"name\":\"messages\",\"kind\":\"object\",\"type\":\"PrivateMessage\",\"relationName\":\"PrivateChatToPrivateMessage\"}],\"dbName\":null},\"PrivateMessage\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"chatId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"senderId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mediaUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mediaType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"chat\",\"kind\":\"object\",\"type\":\"PrivateChat\",\"relationName\":\"PrivateChatToPrivateMessage\"},{\"name\":\"sender\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"PrivateMessageToUser\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -195,6 +195,46 @@ export interface PrismaClient<
     * ```
     */
   get group(): Prisma.GroupDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.groupMember`: Exposes CRUD operations for the **GroupMember** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GroupMembers
+    * const groupMembers = await prisma.groupMember.findMany()
+    * ```
+    */
+  get groupMember(): Prisma.GroupMemberDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.groupMessage`: Exposes CRUD operations for the **GroupMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GroupMessages
+    * const groupMessages = await prisma.groupMessage.findMany()
+    * ```
+    */
+  get groupMessage(): Prisma.GroupMessageDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.privateChat`: Exposes CRUD operations for the **PrivateChat** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PrivateChats
+    * const privateChats = await prisma.privateChat.findMany()
+    * ```
+    */
+  get privateChat(): Prisma.PrivateChatDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.privateMessage`: Exposes CRUD operations for the **PrivateMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PrivateMessages
+    * const privateMessages = await prisma.privateMessage.findMany()
+    * ```
+    */
+  get privateMessage(): Prisma.PrivateMessageDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

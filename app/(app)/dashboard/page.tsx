@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import DashboardHeader from "@/components/DashboardHeader";
 import GroupCard from "@/components/GroupCard";
 import JoinedGroupCard from "@/components/JoinedGroupCard";
-import CreateGroupDialog from "@/components/CreateGroupDialog";
+import CreateGroupDialog from "@/components/modals/CreateGroupDialog";
 import { Button } from "@/components/ui/button";
 import { Plus, ArrowRight } from "lucide-react";
 

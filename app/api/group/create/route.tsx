@@ -38,23 +38,21 @@ export async function POST(req: NextRequest): Promise<NextResponse<CreateGroupRe
     const { groupName, description, maxMembers, expiryDate, latitude, longitude } =
       validationResult.data;
 
+    // Creating the group and adding the creator as the first member
     const group = await prisma.group.create({
       data: {
         name: groupName,
         description,
         maxMembers,
-        expiryDate: expiryDate ? new Date(expiryDate) : null,
+        expiresAt: expiryDate ? new Date(expiryDate) : null,
         latitude,
         longitude,
         lastLocation: new Date(),
-        members: {
-          connect: {
-            id: user.id,
+        groupMembers: {
+          create: {
+            userId: user.id,
           },
         },
-      },
-      include: {
-        members: true,
       },
     });
 
@@ -67,7 +65,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<CreateGroupRe
           name: group.name,
           description: group.description,
           maxMembers: group.maxMembers,
-          expiryDate: group.expiryDate,
+          expiryDate: group.expiresAt,
           createdAt: group.createdAt,
         },
       },

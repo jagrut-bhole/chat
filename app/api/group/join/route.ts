@@ -40,7 +40,11 @@ export async function POST(req: NextRequest): Promise<NextResponse<JoinGroupResp
     const group = await prisma.group.findUnique({
       where: { id: groupId },
       include: {
-        members: true,
+        _count: {
+          select: {
+            groupMembers: true,
+          },
+        },
       },
     });
 
@@ -56,9 +60,17 @@ export async function POST(req: NextRequest): Promise<NextResponse<JoinGroupResp
       );
     }
 
-    const isAlreadyMember = group.members.some((member) => member.id === user.id);
+    // Check if user is already a member using GroupMember table
+    const existingMembership = await prisma.groupMember.findUnique({
+      where: {
+        userId_groupId: {
+          userId: user.id,
+          groupId: groupId,
+        },
+      },
+    });
 
-    if (isAlreadyMember) {
+    if (existingMembership) {
       return NextResponse.json(
         {
           success: false,
@@ -70,7 +82,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<JoinGroupResp
       );
     }
 
-    if (group.maxMembers && group.members.length >= group.maxMembers) {
+    if (group.maxMembers && group._count.groupMembers >= group.maxMembers) {
       return NextResponse.json(
         {
           success: false,
@@ -83,7 +95,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<JoinGroupResp
     }
 
     // Check if group has expired
-    if (group.expiryDate && new Date(group.expiryDate) < new Date()) {
+    if (group.expiresAt && new Date(group.expiresAt) < new Date()) {
       return NextResponse.json(
         {
           success: false,
@@ -95,13 +107,11 @@ export async function POST(req: NextRequest): Promise<NextResponse<JoinGroupResp
       );
     }
 
-    // Add user to group
-    await prisma.group.update({
-      where: { id: groupId },
+    // Add user to group via GroupMember table
+    await prisma.groupMember.create({
       data: {
-        members: {
-          connect: { id: user.id },
-        },
+        userId: user.id,
+        groupId: groupId,
       },
     });
 
@@ -112,7 +122,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<JoinGroupResp
         data: {
           groupId: group.id,
           name: group.name,
-          memberCount: group.members.length + 1,
+          memberCount: group._count.groupMembers + 1,
         },
       },
       {
