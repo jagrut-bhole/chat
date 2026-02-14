@@ -1,65 +1,59 @@
-import Image from "next/image";
+"use client";
+
+import ProximityScroll from "@/components/ProximityScroll";
+import Link from "next/link";
+import BentoGrid01 from "@/components/ui/bento-grid";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="flex min-h-screen flex-col bg-[#050505] text-white selection:bg-white selection:text-black">
+      {/* Scrollytelling Section */}
+      <ProximityScroll />
+
+      {/* Features */}
+      <section className="min-h-screen flex justify-center">
+        <BentoGrid01 />
+      </section>
+
+      {/* CTA Footer */}
+      <section className="relative z-10 w-full py-32 px-6 border-t border-white/5 bg-[#050505] overflow-hidden">
+        {/* <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#00FFD1]/10 blur-[120px] rounded-full pointer-events-none" /> */}
+
+        <div className="max-w-4xl mx-auto text-center relative z-20">
+          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8 text-white">
+            Ready to go <span className="text-white">unseen?</span>
+          </h2>
+          <button className="bg-white text-black cursor-pointer px-10 py-5 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105">
+            Get Started
+          </button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Minimal Footer */}
+      <footer className="relative z-10 w-full py-8 text-center text-white/20 text-sm border-t border-white/5 bg-[#050505]">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p>&copy; {new Date().getFullYear()} Proximity Labs. All rights reserved.</p>
+          <div className="flex gap-6">
+            <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="#" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="#" className="hover:text-white transition-colors">Twitter</Link>
+          </div>
         </div>
-      </main>
-    </div>
+      </footer>
+    </main>
   );
+}
+
+function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
+  return (
+    <div className="group p-8 rounded-2xl bg-[#0A0A0A] border border-white/5 hover:border-[#00FFD1]/30 transition-all duration-300 hover:bg-[#0F0F0F]">
+      <div className="mb-6 p-4 rounded-full bg-white/5 w-fit group-hover:bg-[#00FFD1]/10 transition-colors text-white group-hover:text-[#00FFD1]">
+        {icon}
+      </div>
+      <h3 className="text-xl font-bold mb-3 text-white/90 group-hover:text-white">{title}</h3>
+      <p className="text-white/50 leading-relaxed text-sm group-hover:text-white/70 transition-colors">
+        {desc}
+      </p>
+    </div>
+  )
 }
