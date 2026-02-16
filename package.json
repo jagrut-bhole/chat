@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev && npx tsx lib/socket.ts",
     "dev:ws": "npx tsx lib/socket.ts",
     "build": "next build",
-    "start": "next start",
+    "start": "next start && npx tsx lib/socket.ts",
     "start:ws": "npx tsx lib/socket.ts",
     "lint": "eslint",
     "format": "prettier --write ."
