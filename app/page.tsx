@@ -17,7 +17,6 @@ export default function Home() {
 
       {/* CTA Footer */}
       <section className="relative z-10 w-full py-32 px-6 border-t border-white/5 bg-[#050505] overflow-hidden">
-        {/* <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#00FFD1]/10 blur-[120px] rounded-full pointer-events-none" /> */}
 
         <div className="max-w-4xl mx-auto text-center relative z-20">
           <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8 text-white">
@@ -47,27 +46,5 @@ export default function Home() {
         </div>
       </footer>
     </main>
-  );
-}
-
-function FeatureCard({
-  icon,
-  title,
-  desc,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-}) {
-  return (
-    <div className="group p-8 rounded-2xl bg-[#0A0A0A] border border-white/5 hover:border-[#00FFD1]/30 transition-all duration-300 hover:bg-[#0F0F0F]">
-      <div className="mb-6 p-4 rounded-full bg-white/5 w-fit group-hover:bg-[#00FFD1]/10 transition-colors text-white group-hover:text-[#00FFD1]">
-        {icon}
-      </div>
-      <h3 className="text-xl font-bold mb-3 text-white/90 group-hover:text-white">{title}</h3>
-      <p className="text-white/50 leading-relaxed text-sm group-hover:text-white/70 transition-colors">
-        {desc}
-      </p>
-    </div>
   );
 }
