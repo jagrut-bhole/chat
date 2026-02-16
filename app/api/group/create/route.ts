@@ -65,7 +65,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<CreateGroupRe
           name: group.name,
           description: group.description,
           maxMembers: group.maxMembers,
-          expiryDate: group.expiresAt,
+          expiresAt: group.expiresAt,
           createdAt: group.createdAt,
         },
       },

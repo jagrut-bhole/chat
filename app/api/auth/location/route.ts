@@ -3,12 +3,11 @@ import prisma from "@/lib/prisma";
 import { getAuthenticatedUser } from "@/helpers/authHelper";
 import { geoLocation, formatLocation } from "@/lib/geocode";
 
-// updating users cache
 import { CacheKeys, setCachedData } from "@/lib/upstash-redis/cache";
 
 import { locationSchema } from "./LocationSchema";
 
-export async function UPDATE(req: NextRequest): Promise<NextResponse> {
+export async function PUT(req: NextRequest): Promise<NextResponse> {
   try {
     const user = await getAuthenticatedUser();
 
@@ -40,7 +39,6 @@ export async function UPDATE(req: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // checks if user has updated location in 24 hours
     if (user.lastLocation) {
       const lastUpdateTime = new Date(user.lastLocation).getTime();
       const currentTime = new Date().getTime();

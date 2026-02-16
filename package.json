@@ -7,6 +7,7 @@
     "dev:ws": "npx tsx lib/socket.ts",
     "build": "next build",
     "start": "next start",
+    "start:ws": "npx tsx lib/socket.ts",
     "lint": "eslint",
     "format": "prettier --write ."
   },
