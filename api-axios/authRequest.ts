@@ -73,3 +73,21 @@ export const updateLocation = async (data: z.infer<typeof UpdateLocationSchema>)
     throw error;
   }
 };
+
+/* Delete Account Request */
+
+import { DeleteAccountSchema } from "@/types/Schemas/AuthSchema";
+
+export const deleteAccount = async (data: z.infer<typeof DeleteAccountSchema>) => {
+  try {
+    const response = await axios.delete('/api/auth/delete-account', {
+      data
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data || error.message;
+    }
+    throw error;
+  }
+}

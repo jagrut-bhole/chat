@@ -6,16 +6,18 @@ import { useRouter } from "next/navigation";
 import { userProfileRequest, updateLocation } from "@/api-axios/authRequest";
 import { UserProfileSchema } from "@/types/Schemas/AuthSchema";
 import { z } from "zod";
-import { ArrowLeft, MapPin, Calendar, Lock, Shield, Map } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Lock, Shield, Map, Trash2 } from "lucide-react";
 import ChangePasswordModal from "./ChangePasswordModal ";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import DeleteAccountModal from "@/components/modals/DeleteAccountModal";
 
 export default function Profile() {
   const [user, setUser] = useState<z.infer<typeof UserProfileSchema> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
 
   const { status } = useSession();
   const router = useRouter();
@@ -119,7 +121,7 @@ export default function Profile() {
         {/* Back Button */}
         <button
           onClick={() => router.push("/dashboard")}
-          className="flex items-center text-zinc-400 hover:text-white mb-6 transition-colors group"
+          className="flex items-center text-zinc-400 hover:text-white mb-6 transition-colors group cursor-pointer"
         >
           <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
           Back to Dashboard
@@ -225,6 +227,28 @@ export default function Profile() {
                   </button>
                 </div>
               </div>
+
+              {/* Delete Account Section */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-zinc-200 font-semibold">
+                  <Trash2 size={18} className="text-red-500" />
+                  <h3>Danger Zone</h3>
+                </div>
+                <div className="bg-red-950/20 p-5 rounded-xl border border-red-900/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-red-300 mb-1">Delete Account</p>
+                    <p className="text-xs text-red-400/80">
+                      Permanently delete your account and all associated data
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setIsDeleteAccountModalOpen(true)}
+                    className="py-2 px-4 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors whitespace-nowrap cursor-pointer"
+                  >
+                    Delete Account
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -232,6 +256,11 @@ export default function Profile() {
         <ChangePasswordModal
           isOpen={isPasswordModalOpen}
           onClose={() => setIsPasswordModalOpen(false)}
+        />
+
+        <DeleteAccountModal
+          isOpen={isDeleteAccountModalOpen}
+          onClose={() => setIsDeleteAccountModalOpen(false)}
         />
       </motion.div>
     </div>

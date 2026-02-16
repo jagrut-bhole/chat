@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:ws": "npx tsx lib/socket.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

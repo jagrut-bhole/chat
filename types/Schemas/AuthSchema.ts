@@ -55,3 +55,8 @@ export const UpdateLocationSchema = z.object({
   latitude: z.number(),
   longitude: z.number(),
 });
+
+export const DeleteAccountSchema = z.object({
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+  userId: z.string(),
+});

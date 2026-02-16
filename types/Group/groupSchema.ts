@@ -29,3 +29,6 @@ export const GroupsResponseSchema = z.object({
   data: z.array(GroupSchema).optional(),
 });
 
+export const LeaveGroupSchema = z.object({
+  groupId: z.string(),
+});

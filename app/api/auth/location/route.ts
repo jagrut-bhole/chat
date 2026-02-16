@@ -3,9 +3,13 @@ import prisma from "@/lib/prisma";
 import { getAuthenticatedUser } from "@/helpers/authHelper";
 import { geoLocation, formatLocation } from "@/lib/geocode";
 
+// updating users cache
+import { CacheKeys, setCachedData } from "@/lib/upstash-redis/cache";
+
+
 import { locationSchema } from "./LocationSchema";
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function UPDATE(req: NextRequest): Promise<NextResponse> {
   try {
     const user = await getAuthenticatedUser();
 
@@ -79,6 +83,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         location: formattedLocation,
       },
     });
+
+    await setCachedData(CacheKeys.user(user.id),{
+      ...user,
+      lastLocation: new Date(),
+      latitude: body.latitude,
+      longitude: body.longitude,
+      location: formattedLocation,
+    }, 60 * 10);
 
     return NextResponse.json(
       {

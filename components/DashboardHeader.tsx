@@ -13,10 +13,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardHeader() {
   const [isRandomChatOpen, setIsRandomChatOpen] = useState(false);
   const [isMatching, setIsMatching] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    // Clear all cookies
+    document.cookie.split(";").forEach((cookie) => {
+      const name = cookie.split("=")[0].trim();
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    });
+
+    // Sign out and redirect to home
+    await signOut({ redirect: false });
+    router.push("/");
+  };
 
   return (
     <>
@@ -52,12 +67,18 @@ export default function DashboardHeader() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48 bg-black">
-                <DropdownMenuItem className="gap-2 cursor-pointer text-white">
+                <DropdownMenuItem
+                  className="gap-2 cursor-pointer text-white"
+                  onClick={() => router.push("/profile")}
+                >
                   <User className="h-4 w-4" />
                   Profile
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="gap-2 cursor-pointer text-red-500">
+                <DropdownMenuItem
+                  className="gap-2 cursor-pointer text-red-500"
+                  onClick={handleLogout}
+                >
                   <LogOut className="h-4 w-4" />
                   Logout
                 </DropdownMenuItem>

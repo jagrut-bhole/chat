@@ -2,7 +2,7 @@ import axios from "axios";
 import { z } from "zod";
 
 /* Create Group Request */
-import { CreateGroupSchema, JoinGroupSchema } from "@/types/Group/groupSchema";
+import { CreateGroupSchema, JoinGroupSchema, LeaveGroupSchema } from "@/types/Group/groupSchema";
 
 export const createGroupRequest = async (data: z.infer<typeof CreateGroupSchema>) => {
   try {
@@ -54,3 +54,15 @@ export const fetchAllGroupsRequest = async () => {
     throw error;
   }
 };
+
+export const leaveGroupRequest = async (data: z.infer<typeof LeaveGroupSchema>) => {
+  try {
+    const response = await axios.delete('/api/group/leave', { data });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data || error.message;
+    }
+    throw error;
+  }
+}
