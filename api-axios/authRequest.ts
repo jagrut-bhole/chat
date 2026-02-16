@@ -80,8 +80,8 @@ import { DeleteAccountSchema } from "@/types/Schemas/AuthSchema";
 
 export const deleteAccount = async (data: z.infer<typeof DeleteAccountSchema>) => {
   try {
-    const response = await axios.delete('/api/auth/delete-account', {
-      data
+    const response = await axios.delete("/api/auth/delete-account", {
+      data,
     });
     return response.data;
   } catch (error) {
@@ -90,4 +90,4 @@ export const deleteAccount = async (data: z.infer<typeof DeleteAccountSchema>) =
     }
     throw error;
   }
-}
+};

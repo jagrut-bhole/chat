@@ -57,7 +57,7 @@ export const fetchAllGroupsRequest = async () => {
 
 export const leaveGroupRequest = async (data: z.infer<typeof LeaveGroupSchema>) => {
   try {
-    const response = await axios.delete('/api/group/leave', { data });
+    const response = await axios.delete("/api/group/leave", { data });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -65,4 +65,4 @@ export const leaveGroupRequest = async (data: z.infer<typeof LeaveGroupSchema>) 
     }
     throw error;
   }
-}
+};

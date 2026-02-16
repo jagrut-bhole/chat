@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Shield, MessageCircle, Globe, Users, Zap, Smartphone } from "lucide-react"
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Shield, MessageCircle, Globe, Users, Zap, Smartphone } from "lucide-react";
 
 function ChatBubbles() {
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActive((prev) => (prev + 1) % 3)
-    }, 2000)
-    return () => clearInterval(interval)
-  }, [])
+      setActive((prev) => (prev + 1) % 3);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-3 p-4">
@@ -32,18 +32,18 @@ function ChatBubbles() {
         </motion.div>
       </AnimatePresence>
     </div>
-  )
+  );
 }
 
 function GroupAnimation() {
-  const [count, setCount] = useState(1)
+  const [count, setCount] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCount((prev) => (prev >= 5 ? 1 : prev + 1))
-    }, 1200)
-    return () => clearInterval(interval)
-  }, [])
+      setCount((prev) => (prev >= 5 ? 1 : prev + 1));
+    }, 1200);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex items-center justify-center h-full gap-1 p-4">
@@ -63,16 +63,16 @@ function GroupAnimation() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function SpeedIndicator() {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setLoading(false), 500)
-    return () => clearTimeout(timeout)
-  }, [])
+    const timeout = setTimeout(() => setLoading(false), 500);
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-3 p-4">
@@ -80,9 +80,7 @@ function SpeedIndicator() {
         <div className="w-16 h-16 rounded-full border-4 border-white/20 flex items-center justify-center">
           <AnimatePresence mode="wait">
             {loading ? (
-              <motion.div
-                className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"
-              />
+              <motion.div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
               <motion.span
                 initial={{ opacity: 0, scale: 0.5 }}
@@ -105,7 +103,7 @@ function SpeedIndicator() {
         />
       </div>
     </div>
-  )
+  );
 }
 
 function SecurityBadge() {
@@ -113,22 +111,20 @@ function SecurityBadge() {
     { id: 1, active: false },
     { id: 2, active: false },
     { id: 3, active: false },
-  ])
+  ]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setShields((prev) => {
-        const nextIndex = prev.findIndex((s) => !s.active)
+        const nextIndex = prev.findIndex((s) => !s.active);
         if (nextIndex === -1) {
-          return prev.map(() => ({ id: Math.random(), active: false }))
+          return prev.map(() => ({ id: Math.random(), active: false }));
         }
-        return prev.map((s, i) =>
-          i === nextIndex ? { ...s, active: true } : s
-        )
-      })
-    }, 800)
-    return () => clearInterval(interval)
-  }, [])
+        return prev.map((s, i) => (i === nextIndex ? { ...s, active: true } : s));
+      });
+    }, 800);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex items-center justify-center h-full gap-3 p-4">
@@ -142,11 +138,11 @@ function SecurityBadge() {
         </motion.div>
       ))}
     </div>
-  )
+  );
 }
 
 function GlobalNetwork() {
-  const pulses = [0, 1, 2, 3, 4]
+  const pulses = [0, 1, 2, 3, 4];
 
   return (
     <div className="relative flex items-center justify-center h-full p-4">
@@ -165,7 +161,7 @@ function GlobalNetwork() {
         />
       ))}
     </div>
-  )
+  );
 }
 
 export default function BentoGrid01() {
@@ -267,5 +263,5 @@ export default function BentoGrid01() {
         </div>
       </div>
     </section>
-  )
+  );
 }

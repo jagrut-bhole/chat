@@ -203,30 +203,34 @@ export default function Dashboard() {
             <div className="inline-flex h-12 items-center rounded-xl bg-zinc-900/50 p-1.5 border border-zinc-800">
               <button
                 onClick={() => switchTab("joined")}
-                className={`inline-flex items-center justify-center rounded-lg px-6 py-2 text-sm font-medium transition-all duration-200 cursor-pointer ${activeTab === "joined"
-                  ? "bg-zinc-800 text-white shadow-sm ring-1 ring-white/10"
-                  : "text-zinc-500 hover:text-zinc-300"
-                  }`}
+                className={`inline-flex items-center justify-center rounded-lg px-6 py-2 text-sm font-medium transition-all duration-200 cursor-pointer ${
+                  activeTab === "joined"
+                    ? "bg-zinc-800 text-white shadow-sm ring-1 ring-white/10"
+                    : "text-zinc-500 hover:text-zinc-300"
+                }`}
               >
                 Joined Groups
                 <span
-                  className={`ml-2 text-xs rounded-full px-2 py-0.5 ${activeTab === "joined" ? "bg-black/30 text-white" : "bg-black/20 text-zinc-500"
-                    }`}
+                  className={`ml-2 text-xs rounded-full px-2 py-0.5 ${
+                    activeTab === "joined" ? "bg-black/30 text-white" : "bg-black/20 text-zinc-500"
+                  }`}
                 >
                   {joinedGroups.length}
                 </span>
               </button>
               <button
                 onClick={() => switchTab("all")}
-                className={`inline-flex items-center justify-center rounded-lg px-6 py-2 text-sm font-medium transition-all duration-200 cursor-pointer ${activeTab === "all"
-                  ? "bg-zinc-800 text-white shadow-sm ring-1 ring-white/10"
-                  : "text-zinc-500 hover:text-zinc-300"
-                  }`}
+                className={`inline-flex items-center justify-center rounded-lg px-6 py-2 text-sm font-medium transition-all duration-200 cursor-pointer ${
+                  activeTab === "all"
+                    ? "bg-zinc-800 text-white shadow-sm ring-1 ring-white/10"
+                    : "text-zinc-500 hover:text-zinc-300"
+                }`}
               >
                 All Groups
                 <span
-                  className={`ml-2 text-xs rounded-full px-2 py-0.5 ${activeTab === "all" ? "bg-black/30 text-white" : "bg-black/20 text-zinc-500"
-                    }`}
+                  className={`ml-2 text-xs rounded-full px-2 py-0.5 ${
+                    activeTab === "all" ? "bg-black/30 text-white" : "bg-black/20 text-zinc-500"
+                  }`}
                 >
                   {allGroups.length}
                 </span>

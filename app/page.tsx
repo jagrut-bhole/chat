@@ -34,9 +34,15 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p>&copy; {new Date().getFullYear()} Proximity Labs. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms</Link>
-            <Link href="#" className="hover:text-white transition-colors">Twitter</Link>
+            <Link href="#" className="hover:text-white transition-colors">
+              Privacy
+            </Link>
+            <Link href="#" className="hover:text-white transition-colors">
+              Terms
+            </Link>
+            <Link href="#" className="hover:text-white transition-colors">
+              Twitter
+            </Link>
           </div>
         </div>
       </footer>
@@ -44,7 +50,15 @@ export default function Home() {
   );
 }
 
-function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
+function FeatureCard({
+  icon,
+  title,
+  desc,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+}) {
   return (
     <div className="group p-8 rounded-2xl bg-[#0A0A0A] border border-white/5 hover:border-[#00FFD1]/30 transition-all duration-300 hover:bg-[#0F0F0F]">
       <div className="mb-6 p-4 rounded-full bg-white/5 w-fit group-hover:bg-[#00FFD1]/10 transition-colors text-white group-hover:text-[#00FFD1]">
@@ -55,5 +69,5 @@ function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: stri
         {desc}
       </p>
     </div>
-  )
+  );
 }

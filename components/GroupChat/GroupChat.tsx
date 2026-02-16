@@ -3,15 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import {
-  ArrowLeft,
-  Send,
-  Settings,
-  Users,
-  LogOut,
-  Loader2,
-  ChevronDown,
-} from "lucide-react";
+import { ArrowLeft, Send, Settings, Users, LogOut, Loader2, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -33,7 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import axios from "axios";
 import { toast } from "sonner";
-
+import { leaveGroupRequest } from "@/api-axios/groupRequest";
 // --- Types ---
 interface ChatMessage {
   id: string;
@@ -92,7 +84,6 @@ export default function GroupChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [leaveConfirm, setLeaveConfirm] = useState(false);
-  const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [groupInfo, setGroupInfo] = useState<GroupInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -115,9 +106,7 @@ export default function GroupChat() {
     try {
       const response = await axios.get("/api/group/joined");
       if (response.data.success && response.data.data) {
-        const group = response.data.data.find(
-          (g: GroupInfo) => g.id === groupId
-        );
+        const group = response.data.data.find((g: GroupInfo) => g.id === groupId);
         if (group) {
           setGroupInfo(group);
         }
@@ -134,13 +123,14 @@ export default function GroupChat() {
         const params = new URLSearchParams({ groupId: groupId });
         if (cursor) params.set("cursor", cursor);
 
-        const response = await axios.get(
-          `/api/group/chat?${params.toString()}`
-        );
+        const response = await axios.get(`/api/group/chat?${params.toString()}`);
 
         if (response.data.success) {
-          const { messages: newMessages, nextCursor: newCursor, hasMore: more } =
-            response.data.data;
+          const {
+            messages: newMessages,
+            nextCursor: newCursor,
+            hasMore: more,
+          } = response.data.data;
 
           if (cursor) {
             // Loading older messages (prepend)
@@ -310,10 +300,8 @@ export default function GroupChat() {
 
   const handleLeave = async () => {
     try {
-      const response = await axios.delete("/api/group/leave-group", {
-        data: { groupId: groupId },
-      });
-      if (response.data.success) {
+      const response = await leaveGroupRequest({ groupId: groupId });
+      if (response.success) {
         toast.success("Left the group");
         router.push("/dashboard");
       }
@@ -323,11 +311,6 @@ export default function GroupChat() {
     }
     setLeaveConfirm(false);
   };
-
-  // const handleDelete = () => {
-  //   setDeleteConfirm(false);
-  //   router.push("/dashboard");
-  // };
 
   // --- Render date separator ---
   const renderDateSeparator = (dateStr: string) => (
@@ -350,21 +333,15 @@ export default function GroupChat() {
         className={`flex ${isMe ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2 duration-300`}
       >
         <div
-          className={`max-w-[75%] rounded-2xl px-4 py-2.5 ${isMe
-            ? "bg-white text-black rounded-br-md"
-            : "bg-zinc-800/80 text-zinc-100 rounded-bl-md border border-zinc-700/50"
-            }`}
+          className={`max-w-[75%] rounded-2xl px-4 py-2.5 ${
+            isMe
+              ? "bg-white text-black rounded-br-md"
+              : "bg-zinc-800/80 text-zinc-100 rounded-bl-md border border-zinc-700/50"
+          }`}
         >
-          {!isMe && (
-            <p className="text-xs font-semibold mb-0.5 text-zinc-400">
-              {msg.username}
-            </p>
-          )}
+          {!isMe && <p className="text-xs font-semibold mb-0.5 text-zinc-400">{msg.username}</p>}
           <p className="text-sm leading-relaxed break-words">{msg.content}</p>
-          <p
-            className={`text-[10px] mt-1 ${isMe ? "text-black/50" : "text-zinc-500"
-              }`}
-          >
+          <p className={`text-[10px] mt-1 ${isMe ? "text-black/50" : "text-zinc-500"}`}>
             {formatTime(msg.createdAt)}
           </p>
         </div>
@@ -400,9 +377,7 @@ export default function GroupChat() {
         </Button>
 
         <div className="flex-1 min-w-0">
-          <h1 className="text-lg font-bold text-white truncate">
-            {groupName}
-          </h1>
+          <h1 className="text-lg font-bold text-white truncate">{groupName}</h1>
           <div className="flex items-center gap-3 text-xs text-zinc-500">
             <span className="flex items-center gap-1.5">
               {connected ? (
@@ -440,10 +415,7 @@ export default function GroupChat() {
               <Settings className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="w-48 bg-zinc-900 border-zinc-800"
-          >
+          <DropdownMenuContent align="end" className="w-48 bg-zinc-900 border-zinc-800">
             <DropdownMenuItem
               className="gap-2 cursor-pointer text-zinc-300 hover:text-white focus:text-white focus:bg-zinc-800"
               onClick={() => setLeaveConfirm(true)}
@@ -495,19 +467,14 @@ export default function GroupChat() {
               💬
             </div>
             <div>
-              <p className="text-white font-medium text-lg mb-1">
-                No messages yet
-              </p>
-              <p className="text-zinc-500 text-sm">
-                Be the first to say something!
-              </p>
+              <p className="text-white font-medium text-lg mb-1">No messages yet</p>
+              <p className="text-zinc-500 text-sm">Be the first to say something!</p>
             </div>
           </div>
         ) : (
           messages.map((msg, index) => {
             const showDateSeparator =
-              index === 0 ||
-              !isSameDay(messages[index - 1].createdAt, msg.createdAt);
+              index === 0 || !isSameDay(messages[index - 1].createdAt, msg.createdAt);
 
             return (
               <div key={msg.id}>
@@ -560,12 +527,9 @@ export default function GroupChat() {
       <AlertDialog open={leaveConfirm} onOpenChange={setLeaveConfirm}>
         <AlertDialogContent className="bg-zinc-900 border-zinc-800">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-white">
-              Leave Group?
-            </AlertDialogTitle>
+            <AlertDialogTitle className="text-white">Leave Group?</AlertDialogTitle>
             <AlertDialogDescription className="text-zinc-400">
-              You&apos;ll no longer receive messages from this group. You can
-              rejoin anytime.
+              You&apos;ll no longer receive messages from this group. You can rejoin anytime.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -574,14 +538,14 @@ export default function GroupChat() {
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleLeave}
-              className="bg-white text-black hover:bg-zinc-200 cursor-pointer"
+              className="bg-white text-red-500 hover:text-red-500 hover:bg-white cursor-pointer"
             >
               Leave
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      
+
       {/* Delete confirmation */}
       {/* <AlertDialog open={deleteConfirm} onOpenChange={setDeleteConfirm}>
         <AlertDialogContent className="bg-zinc-900 border-zinc-800">
