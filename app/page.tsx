@@ -3,8 +3,10 @@
 import ProximityScroll from "@/components/ProximityScroll";
 import Link from "next/link";
 import BentoGrid01 from "@/components/ui/bento-grid";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <main className="flex min-h-screen flex-col bg-[#050505] text-white selection:bg-white selection:text-black">
       {/* Scrollytelling Section */}
@@ -22,7 +24,9 @@ export default function Home() {
           <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8 text-white">
             Ready to go <span className="text-white">unseen?</span>
           </h2>
-          <button className="bg-white text-black cursor-pointer px-10 py-5 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105">
+          <button 
+            onClick={() => router.push('/signup')}
+            className="bg-white text-black cursor-pointer px-10 py-5 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105">
             Get Started
           </button>
         </div>

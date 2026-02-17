@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useScroll, useTransform, motion, useSpring } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const FRAME_COUNT = 40;
 const CANVAS_WIDTH = 1920; // Assume standard width, will scale to fit
@@ -12,6 +13,7 @@ export default function ProximityScroll() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   // Scroll progress for the entire container
   const { scrollYProgress } = useScroll({
@@ -238,7 +240,9 @@ export default function ProximityScroll() {
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tighter">
             Join the conversation.
           </h2>
-          <button className="pointer-events-auto bg-white text-black px-8 py-4 rounded-full font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+          <button 
+            onClick={() => router.push('/signup')}
+            className="pointer-events-auto bg-white text-black px-8 py-4 rounded-full font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.4)]">
             Get Started
           </button>
         </motion.div>
